@@ -191,3 +191,27 @@ func(*args, **kw)
 # 5.关键字参数既可以直接传入func(a=1, b=2)，又可以先组装dict，再通过**kw传入func(**{'a':1,'b':2})
 # 6.使用*args和**kw是Python的习惯写法
 
+# 一个递归函数的例子
+def fact(n):
+    if n == 1:
+        return 1
+    return n * fact(n-1)
+print fact(1)
+print fact(5)
+print fact(100)
+# 使用递归函数需要注意防止栈溢出
+#print fact(1000)
+
+# 解决递归调用栈溢出的方法是通过尾递归优化。尾递归是指在函数返回的时候，调用自身本身，并且，return语句不能包含表达式。
+# 这样，编译器或者解释器就可以把尾递归做优化，使递归本身无论调用多少次，都只占用一个栈帧，不会出现栈溢出的情况。
+# 将以上fact(n)函数改成尾递归方式
+def fact1(n):
+    return fact_iter(n, 1)
+def fact_iter(num, product):
+    if num == 1:
+        return product
+    return fact_iter(num - 1, num * product)
+print fact1(5)
+
+# 尾递归调用时，如果做了优化，栈不会增长，因此，无论多少次调用也不会栈溢出
+# 遗憾的是，大多数编程语言没有针对尾递归做优化，Python解释器也没有做优化
