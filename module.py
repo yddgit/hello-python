@@ -40,6 +40,10 @@
 # 两个文件utils.py的模块名分别是mycompany.utils和mycompany.web.utils
 # mycompany.web模块对应的文件是mycompany/web/__init__.py
 
+# 引入__future__模块
+from __future__ import unicode_literals
+from __future__ import division
+
 # 使用模块
 
 # Python内置了很多非常有用的模块，以sys模块为例
@@ -127,4 +131,73 @@ def greeting(name):
 
 # 以上，在模块中公开greeting()函数，把内部逻辑用private函数隐藏起来，调用greeing()函数不用关心内部函数细节
 # 这是一种非常有用的代码封装和抽象的方法：外部不需要引用的函数全部定义成private，只有外部需要引用的函数才定义为public
+
+# 安装第三方模块
+
+# 在Python中安装第三方模块，通过setuptools工具完成
+# Python有两个封装了setuptools的包管理工具：easy_install和pip，官方推荐使用pip
+
+# Mac或Linux默认已安装pip，Windows需要确保在安装时勾选了pip和Add python.exe to Path
+# 可尝试运行pip命令判断其是否已安装
+
+# 第三方库都会在Python官方的pypi.python.org网站注册，安装需要知道第三方库的名字
+# 可在官网或pypi上搜索第三方库的名字，如Python Imaging Library的名称叫做PIL
+
+# 安装PIL：pip install PIL
+# 但安装时会提示：Could not find a version that satisfies the requirement PIL
+# 搜索PIL：pip search PIL
+# 在探索结果中发现：Pillow (4.2.1) - Python Imaging Library (Fork)
+# 因此需要安装Pillow：pip install Pillow
+
+# 使用PIL生成缩略图
+from PIL import Image
+im = Image.open('test.jpg')
+print im.format, im.size, im.mode
+#size = (192, 108)
+#im.thumbnail(size)
+#im.save('thumb.jpg', 'JPEG')
+
+# 其他常用的第三方库还有MySQL驱动MySQL-python，用于科学计算的库numpy，生成文本的模板工具Jinja2等
+# 安装MySQL-python之前需要先安装
+# Microsoft Visual C++ Compiler for Python 2.7
+# https://www.microsoft.com/en-us/download/details.aspx?id=44266
+# mysql-connector-c-6.0.2-win32.msi
+# https://dev.mysql.com/downloads/connector/c/6.0.html#downloads
+
+# 模块搜索路径
+
+# 当加载模块时，Python会在指定的路径下搜索对应的.py文件，如果找不到就会报错
+# 默认Python解释器会搜索当前目录、所有已安装的内置模块和第三方模块，搜索路径存放在sys模块的path变量中
+import sys
+print sys.path
+
+# 如果要添加搜索目录，可以直接修改sys.path变量。这种方法是在运行时修改，运行结束后失效
+sys.path.append('F:\\temp')
+# 也可以设置环境变量PYTHONPATH，该环境变量的内容会被自动添加到模块搜索路径中
+# 注意只需要添加自定义的搜索路径，Python本身的搜索路径不受影响
+
+# 使用__future__
+
+# 由于Python是社区推动的开源且免费的开发语言，不受商业公司控制，因此改进往往比较激进，
+# 不兼容的情况时有发生。为了确保能顺利过渡到新版本，特别提供了__future__模块，可以在旧版本中试验新特性
+
+# Python2.x中'xxx'表示str，Unicode字符串用u'xxx'表示unicode，而在Python3.x中所有字符串都被视为unicode
+# 而在2.x中以'xxx'表示的str在3.x中就必须写成b'xxx'，以此表示二进制字符串
+# 为了适应3.x新的字符串表示方法，在2.x中可以通过unicode_literals来使用3.x的新语法
+#from __future__ import unicode_literals # 这句必须写在文件最开始
+print '\'xxx\' is unicode?', isinstance('xxx', unicode)
+print 'u\'xxx\' is unicode?', isinstance(u'xxx', unicode)
+print '\'xxx\' is str?', isinstance('xxx', str)
+print 'b\'xxx\' is unicode?', isinstance(b'xxx', str)
+
+# 类似的还有除法运算，在Python2.x中，如果是整数相除，结果仍是整数，余数会被扔掉，叫做“地板除”
+print 10 / 3
+# 要做精确除法，必须把其中一个数变成浮点数
+print 10.0 / 3
+# 而在Python3.x中，所有除法都是精确的除法，“地板除”用//表示
+# 如果相在2.7代码中直接使用3.x的除法，可以通过__future__模块的division实现
+#from __future__ import division # 这句必须写在文件最开始
+print '10 / 3 =', 10 / 3
+print '10.0 / 3 =', 10.0 / 3
+print '10 // 3 =', 10 // 3
 
