@@ -192,3 +192,163 @@ class MyUDPServer(UDPServer, ThreadingMixIn):
 #    pass
 # 这样一来，不需要复杂而庞大的继承链，只要选择组合不同类的功能就可以快速构造出所需要的子类
 
+# 定制类
+
+# 类似__slots__这种形如__xxx__的变量或者函数名在Python中是有特殊用途的
+# __slots__限制class的属性
+# __len__()使class作用于len()函数
+
+# __str__指定打印对象时输出的内容
+
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return 'Student object (name: %s)' % self.name
+    __repr__ = __str__
+s = Student('Michael')
+print s
+# 如果不用print，直接敲变量，打印出来的对象依然不是__str__()方法的返回值
+# 这是因为直接显示变量调用的不是__str__()，而是__repr__()，两者的区别是
+# __str__()返回用户看到的字符串
+# __repr__()返回程序开发者看到的字符串，即__repr__()是为调试服务用的
+# 解决办法是再定义一个__repr__()方法，但通过两者代码都一样，可以写作
+# __repr__ = __str__
+
+# __iter__实现可循环对象，实现__iter__()方法，该方法返回一个迭代对象，
+# Python的for循环就会不断调用该迭代对象的next()方法拿到下一个值，直到遇到StopIteration错误时退出循环
+
+class Fib(object):
+    def __init__(self):
+        self.a, self.b = 0, 1 # 初始化两个计数器a，b
+    def __iter__(self):
+        return self # 实例本身就是迭代对象，故返回自己
+    def next(self):
+        self.a, self.b = self.b, self.a + self.b # 计算下一个值
+        if self.a > 10: # 退出循环的条件
+            raise StopIteration
+        return self.a
+for n in Fib():
+    print n
+
+# __getitem__如果要对象表现的像list一样可以按照下标取出元素，需要实现__getitem__()方法
+
+class Fib(object):
+    def __getitem__(self, n):
+        a, b = 1, 1
+        for x in range(n):
+            a, b = b, a + b
+        return a
+f = Fib()
+print f[0]
+print f[1]
+print f[8]
+
+# list还有切片方法，对于__getitem__()传入的参数可能是一个int，也可能是一个切片对象slice
+
+class Fib(object):
+    def __getitem__(self, n):
+        if isinstance(n, int):
+            a, b = 1, 1
+            for x in range(n):
+                a, b = b, a + b
+            return a
+        if isinstance(n, slice):
+            start = n.start
+            stop = n.stop
+            a, b = 1, 1
+            L = []
+            for x in range(stop):
+                if x >= start:
+                    L.append(a)
+                a, b = b, a + b
+            return L
+f = Fib()
+print f[0:5]
+print f[:10]
+
+# 但是没有对step参数作处理，也没有对负数作处理，所以要正确实现一个__getitem__()还有很多工作要做
+# 此处，如果把对象看成dict，__getitem__()的参数也可能是一个可以作key的object，如str
+
+# 与之对应的是__setitem__()方法，把对象视作list或dict来对集合赋值，最后还有一个__delitem__()方法用于删除某个元素
+
+# 通过上面的方法，可将自定义类表现得和Python的list、tuple、dict没什么区别，这完全归功于动态语言的“鸭子类型”，不需要强制继承某个接口
+
+# __getattr__
+
+# 当调用类的方法或属性时，如果不存在，就会报错。要避免这个错误，除了加上一个score属性外，还可以实现__getattr__()方法动态返回一个属性
+class Student(object):
+    def __init__(self):
+        self.name = 'Michael'
+    def __getattr__(self, attr):
+        if attr == 'score':
+            return 99
+# 当调用的属性不存在时，Python解释器会试图调用__getattr__(self, 'score')来尝试获得属性score
+s = Student()
+print s.name
+print s.score
+# 返回函数也是完全可以的
+class Student(object):
+    def __getattr__(self, attr):
+        if attr == 'age':
+            return lambda:25
+# 调用方式也要变为
+s = Student()
+print s.age()
+print s.abc
+# 注意：只有在没有找到属性的情况下，才调用__getattr__，已有的属性不会在__getattr__中查找
+# 另外，以上示例中任意调用如s.abc都会返回None，这是因为定义的__getattr__默认返回None，
+# 要让class只响应特定的几个属性，需要按照约定，抛出AttributeError错误
+class Student(object):
+    def __getattr__(self, attr):
+        if attr == 'age':
+            return lambda:25
+        raise AttributeError("'Student' object has no attribute '%s'" % attr)
+s = Student()
+print s.age()
+#print s.abc
+
+# 这实际上可以把一个类的所有属性和方法调用全部动态化处理，这种特性的使用场景一般是：
+# http://api.server/user/friends
+# http://api.server/user/timeline/list
+# 对于类似这种REST API，如果要写SDK，每个URL都写一个方法，很麻烦，而且API一旦改动，SDK也得改
+# 利用完全动态的__getattr__，可以写出一个链式调用
+class Chain(object):
+    def __init__(self, path=''):
+        self._path = path
+    def __getattr__(self, path):
+        return Chain('%s/%s' % (self._path, path))
+    def __str__(self):
+        return self._path
+print Chain().status.user.timeline.list
+# 这样无论API怎么变，SDK都可以根据URL实现完全动态的调用，而且不随API的增加而改变
+# 还有些REST API会把参数放到URL中，如
+# GET /users/:user/repos
+# 调用时需要把:user替换为实际用户名，如果能写出这样的链式调用
+# Chain().users('michael').repos
+# 就可以非常方便的调用API了
+
+# __call__
+
+# 一个对象的方法可以通过instance.method()来调用，如果定义一个__call__()方法，就可以通过实例本身直接调用此方法instance()
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+    def __call__(self):
+        print ('My name is %s' % self.name)
+s = Student("Michael")
+s()
+
+# __call__()方法还可以定义参数，对实例进行直接调用就好比对一个函数调用一样。
+# 即把对象看作函数，把函数看作对象，这两者本身也没有区别。
+# 如果要判断一个变量是对象还函数，需要判断一个对象是否能被调用，能被调用的对象就是一个Callable对象
+# 通过callable()函数可以判断一个对象是否是“可调用”对象
+print callable(Student('Sam'))
+print callable(max)
+print callable([1, 2, 3])
+print callable(None)
+print callable('string')
+
+# 更多可定制方法参考Python的官方文档
+# http://docs.python.org/2/reference/datamodel.html#special-method-names
+
