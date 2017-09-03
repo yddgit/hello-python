@@ -352,3 +352,144 @@ print callable('string')
 # 更多可定制方法参考Python的官方文档
 # http://docs.python.org/2/reference/datamodel.html#special-method-names
 
+# 使用元类
+
+# 动态语言和静态语言最大的不同，就是函数和类的定义，不是编译时定义的，而是运行时动态创建的
+class Hello(object):
+    def hello(self, name='world'):
+        print 'Hello, %s.' % name
+h = Hello()
+h.hello()
+print type(Hello)
+print type(h)
+# type()函数可以查看一个类型或变量的类型，Hello是一个class，它的类型就是type，而h是一个实例，它的类型就是class.Hello
+
+# class的定义是运行时动态创建的，而创建class的方法就是使用type()函数
+# type()函数既可以返回一个对象的类型，又可以创建出新的类型
+def fn(self, name='world'):
+    print 'Hello, %s.(Created by type())' % name
+Hello = type('Hello', (object,), dict(hello=fn))
+h = Hello()
+h.hello()
+print type(Hello)
+print type(h)
+# 要创建一个class对象，type()函数依次传入3个参数
+# 1.class的名称
+# 2.继承的父类集合，注意Python支持多重继承，如果只有一个父类，要注意tuple的单元素写法
+# 3.class的方法名称与函数绑定，上例是把函数fn绑定到方法名hello上
+
+# metaclass
+
+# 除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass
+# 创建实例的过程：定义metaclass-->创建类-->创建实例
+# 所以，metaclass允许创建类或修改类，或者说可以把类看成是metaclass创建出来的“实例”
+# 如下，使用metaclass给自定义的MyList增加一个add方法：
+class ListMetaclass(type): # metaclass类名总是以Metaclass结尾，metaclass是创建类，所以必须从type类型派生
+    def __new__(cls, name, bases, attrs):
+        attrs['add'] = lambda self, value: self.append(value)
+        return type.__new__(cls, name, bases, attrs)
+class MyList(list):
+    __metaclass__ = ListMetaclass # 指示使用ListMetaclass来定制类
+# 以上Python解释器在创建MyList时，要通过ListMetaclass.__new__()来创建，在此修改类的定义，如，增加新方法，然后返回修改后的定义
+# __new__()方法接收到的参数依次是：
+# 1.当前准备创建的类的对象
+# 2.类的名字
+# 3.类继承的父类集合
+# 4.类的方法集合
+L = MyList()
+L.add(1)
+print L
+l = list()
+#l.add(1) # 普通list没有add()方法
+
+# 通常情况下不会用到metaclass，使用metaclass的典型场景就是ORM
+
+# Field类，保存数据库表的字段名和字段类型
+class Field(object):
+    def __init__(self, name, column_type):
+        self.name = name
+        self.column_type = column_type
+    def __str__(self):
+        return '<%s:%s>' % (self.__class__.__name__, self.name)
+# 在Field基础上，进一步定义StringField、IntegerField
+class StringField(Field):
+    def __init__(self, name):
+        super(StringField, self).__init__(name, 'varchar(100)')
+class IntegerField(Field):
+    def __init__(self, name):
+        super(IntegerField, self).__init__(name, 'bigint')
+# 接下编写ModelMetaclass
+class ModelMetaclass(type):
+    def __new__(cls, name, bases, attrs):
+        if name == 'Model':
+            return type.__new__(cls, name, bases, attrs)
+        mappings = dict()
+        for k, v in attrs.iteritems():
+            if isinstance(v, Field):
+                print 'Found mapping: %s --> %s' % (k, v)
+                mappings[k] = v
+        for k in mappings.iterkeys():
+            attrs.pop(k)
+        attrs['__table__'] = name # 假设表名和类名一样
+        attrs['__mappings__'] = mappings # 保存属性和列的映射关系
+        return type.__new__(cls, name, bases, attrs)
+# Model基类
+class Model(dict):
+    __metaclass__ = ModelMetaclass
+    def __init__(self, **kw):
+        super(Model, self).__init__(**kw)
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Model' object has no attribute '%s'" % key)
+    def __setattr__(self, key, value):
+        self[key] = value
+    def save(self):
+        fields = []
+        params = []
+        args = []
+        for k, v in self.__mappings__.iteritems():
+            fields.append(v.name)
+            params.append('?')
+            args.append(getattr(self, k, None))
+        sql = 'insert into %s (%s) values (%s)' % (self.__table__, ', '.join(fields), ', '.join(params))
+        print 'SQL: %s' % sql
+        print 'ARGS: %s' % str(args)
+# 然后定义User实体
+class User(Model):
+    # 定义类的属性到列的映射
+    id = IntegerField('id')
+    name = StringField('username')
+    email = StringField('email')
+    password = StringField('password')
+u = User(id=12345, name='Michael', email='test@orm.org', password='my-pwd')
+u.save()
+# 观察程序输出可以看到打印出的SQL语句以及参数列表
+
+# 类属性和实例属性
+
+# 直接在class中定义的是类属性
+class Student(object):
+    name = 'Student'
+# 实例属性必须通过实例来绑定
+# 创建实例
+s = Student()
+# 打印name属性，因实例并没有name属性，所以会继续查找class的name属性
+print s.name
+# 这和调用Student.name是一样的
+print Student.name
+# 给实例绑定name属性
+s.name = 'Michael'
+# 由于实例属性优先级比类属性高，因此，它会屏蔽掉类的name属性
+print s.name
+# 但是类属性并未消失，用Student.name仍然可以访问
+print Student.name
+# 如果删除实例的name属性
+del s.name
+# 再次调用s.name，由于实例的name属性没有找到，类的name属性就显示出来了
+print s.name
+
+# 因此，在编写程序的时候，千万不要把实例属性和类属性使用相同的名字
+# 上例的ORM编写的ModelMetaclass会删除掉User类的所有类属性，目的就是避免造成混淆
+
