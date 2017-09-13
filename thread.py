@@ -204,3 +204,34 @@ def loop():
 # 所以，Python中可以使用多线程，但不能有效利用多核，如果要通过多线程利用多核，那只能通过C扩展来实现，不过这样就失去了Python简单易用的特点。
 # 虽然不能利用多线程实现多核任务，但可以通过多进程实现多核任务。多个Python进程有各自独立的GIL锁，互不影响
 
+# ThreadLocal
+
+# 多线程环境下每个线程都有自己的数据，局部变量只有线程自己可见，不影响其他线程。
+# 全局变量修改必须加锁，局部变量在函数调用时传递起来很麻烦。
+
+import threading
+
+# 创建全局的ThreadLocal对象
+local_school = threading.local()
+
+def process_student():
+    print 'Hello, %s (in %s)' % (local_school.student, threading.current_thread().name)
+
+def process_thread(name):
+    # 绑定ThreadLocal的student
+    local_school.student = name
+    process_student()
+
+t1 = threading.Thread(target=process_thread, args=('Alice',), name='Thread-A')
+t2 = threading.Thread(target=process_thread, args=('Bob',), name='Thread-B')
+t1.start()
+t2.start()
+t1.join()
+t2.join()
+
+# 全局变量local_school就是一个ThreadLocal对象，每个Thread对它都可以读写student属性，但互不影响。
+# 可以把local_school看成全局变量，但每个属性都是线程的局部变量，可以任意读写互不干扰，也不用管理锁的问题。
+
+# ThreadLocal最常用的地方就是为每个线程绑定一个数据库连接，HTTP连接，用户身份信息等，
+# 这样一个线程的所有调用到的处理函数都可以非常方便的访问这些资源。
+
