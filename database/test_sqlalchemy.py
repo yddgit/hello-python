@@ -51,7 +51,7 @@ session = DBSession()
 # 创建Query查询，filter是where条件，最后调用one()返回唯一行，如果调用all()则返回所有行
 user = session.query(User).filter(User.id=='2').one()
 # 打印类型和对象的name属性
-print 'type: %s, name: %s' % (type(user), user.name)
+print('type: %s, name: %s' % (type(user), user.name))
 # 关闭session
 session.close()
 

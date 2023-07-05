@@ -12,7 +12,7 @@ s = Student()
 
 # 给实例绑定一个属性
 s.name = 'Michael'
-print s.name
+print(s.name)
 
 # 给实例绑定一个方法
 def set_age(self, age):
@@ -20,7 +20,7 @@ def set_age(self, age):
 from types import MethodType
 s.set_age = MethodType(set_age, s, Student)
 s.set_age(25) # 调用实例方法
-print s.age # 测试结果
+print(s.age) # 测试结果
 
 # 但是，给一个实例绑定的方法，对另一个实例不起作用
 s2 = Student()
@@ -33,8 +33,8 @@ Student.set_score = MethodType(set_score, None, Student)
 # 给class绑定方法后，所有实例均可调用
 s.set_score(100)
 s2.set_score(99)
-print s.score
-print s2.score
+print(s.score)
+print(s2.score)
 
 # 通常情况下，上面的set_score方法可以直接定义在class中，但动态绑定允许我们在程序运行过程中动态给class加上功能
 
@@ -79,7 +79,7 @@ class Student(object):
         self._score = value
 s = Student()
 s.set_score(60)
-print s.get_score()
+print(s.get_score())
 #s.set_score(9999)
 
 # 但是上面的调用方法略显复杂，没有直接调用属性那么简单，此时可以使用装饰器（decorator）
@@ -100,7 +100,7 @@ class Student(object):
 # 于是我们就拥有一个可控的属性操作
 s = Student()
 s.score = 60
-print s.score
+print(s.score)
 #s.score = 9999
 
 # 注意到这个神奇的@property，我们在对实例属性操作的时候，就知道该属性很可能不是直接暴露的，而是通过getter和setter方法来实现的
@@ -118,7 +118,7 @@ class Student(object):
 # 上面的birth属性可读可写，而age就是一个只读属性，因为age可以根据birth和当前时间计算出来
 s = Student()
 s.birth = 1989
-print s.age
+print(s.age)
 #s.age = 29
 
 # 多重继承
@@ -143,10 +143,10 @@ class Ostrich(Bird):
 # 现在要给动物们加上Runnable和Flyable的功能
 class Runnable(object):
     def run(self):
-        print 'Running...'
+        print('Running...')
 class Flyable(object):
     def fly(self):
-        print 'Flying...'
+        print('Flying...')
 # 对于需要Runnable功能的动物，就多继承一个Runnable，如
 class Dog(Mammal, Runnable):
     pass
@@ -162,16 +162,16 @@ class Bat(Mammal, Flyable):
 # 类似的，还可以定义出肉食动物CarnivorousMixin和草食动物HerbivorousMixin，让某个动物拥有好几个Mixin
 class RunnableMixin(object):
     def run(self):
-        print 'Running...'
+        print('Running...')
 class FlyableMixin(object):
     def fly(self):
-        print 'Flying...'
+        print('Flying...')
 class CarnivorousMixin(object):
     def eat(self):
-        print 'Eating meat...'
+        print('Eating meat...')
 class HerbivorousMixin(object):
     def eat(self):
-        print 'Eating grass...'
+        print('Eating grass...')
 class Dog(Mammal, RunnableMixin, CarnivorousMixin):
     pass
 
@@ -207,7 +207,7 @@ class Student(object):
         return 'Student object (name: %s)' % self.name
     __repr__ = __str__
 s = Student('Michael')
-print s
+print(s)
 # 如果不用print，直接敲变量，打印出来的对象依然不是__str__()方法的返回值
 # 这是因为直接显示变量调用的不是__str__()，而是__repr__()，两者的区别是
 # __str__()返回用户看到的字符串
@@ -229,7 +229,7 @@ class Fib(object):
             raise StopIteration
         return self.a
 for n in Fib():
-    print n
+    print(n)
 
 # __getitem__如果要对象表现的像list一样可以按照下标取出元素，需要实现__getitem__()方法
 
@@ -240,9 +240,9 @@ class Fib(object):
             a, b = b, a + b
         return a
 f = Fib()
-print f[0]
-print f[1]
-print f[8]
+print(f[0])
+print(f[1])
+print(f[8])
 
 # list还有切片方法，对于__getitem__()传入的参数可能是一个int，也可能是一个切片对象slice
 
@@ -264,8 +264,8 @@ class Fib(object):
                 a, b = b, a + b
             return L
 f = Fib()
-print f[0:5]
-print f[:10]
+print(f[0:5])
+print(f[:10])
 
 # 但是没有对step参数作处理，也没有对负数作处理，所以要正确实现一个__getitem__()还有很多工作要做
 # 此处，如果把对象看成dict，__getitem__()的参数也可能是一个可以作key的object，如str
@@ -285,8 +285,8 @@ class Student(object):
             return 99
 # 当调用的属性不存在时，Python解释器会试图调用__getattr__(self, 'score')来尝试获得属性score
 s = Student()
-print s.name
-print s.score
+print(s.name)
+print(s.score)
 # 返回函数也是完全可以的
 class Student(object):
     def __getattr__(self, attr):
@@ -294,8 +294,8 @@ class Student(object):
             return lambda:25
 # 调用方式也要变为
 s = Student()
-print s.age()
-print s.abc
+print(s.age())
+print(s.abc)
 # 注意：只有在没有找到属性的情况下，才调用__getattr__，已有的属性不会在__getattr__中查找
 # 另外，以上示例中任意调用如s.abc都会返回None，这是因为定义的__getattr__默认返回None，
 # 要让class只响应特定的几个属性，需要按照约定，抛出AttributeError错误
@@ -305,8 +305,8 @@ class Student(object):
             return lambda:25
         raise AttributeError("'Student' object has no attribute '%s'" % attr)
 s = Student()
-print s.age()
-#print s.abc
+print(s.age())
+#print(s.abc)
 
 # 这实际上可以把一个类的所有属性和方法调用全部动态化处理，这种特性的使用场景一般是：
 # http://api.server/user/friends
@@ -320,7 +320,7 @@ class Chain(object):
         return Chain('%s/%s' % (self._path, path))
     def __str__(self):
         return self._path
-print Chain().status.user.timeline.list
+print(Chain().status.user.timeline.list)
 # 这样无论API怎么变，SDK都可以根据URL实现完全动态的调用，而且不随API的增加而改变
 # 还有些REST API会把参数放到URL中，如
 # GET /users/:user/repos
@@ -335,7 +335,7 @@ class Student(object):
     def __init__(self, name):
         self.name = name
     def __call__(self):
-        print ('My name is %s' % self.name)
+        print(('My name is %s' % self.name))
 s = Student("Michael")
 s()
 
@@ -343,11 +343,11 @@ s()
 # 即把对象看作函数，把函数看作对象，这两者本身也没有区别。
 # 如果要判断一个变量是对象还函数，需要判断一个对象是否能被调用，能被调用的对象就是一个Callable对象
 # 通过callable()函数可以判断一个对象是否是“可调用”对象
-print callable(Student('Sam'))
-print callable(max)
-print callable([1, 2, 3])
-print callable(None)
-print callable('string')
+print(callable(Student('Sam')))
+print(callable(max))
+print(callable([1, 2, 3]))
+print(callable(None))
+print(callable('string'))
 
 # 更多可定制方法参考Python的官方文档
 # http://docs.python.org/2/reference/datamodel.html#special-method-names
@@ -357,22 +357,22 @@ print callable('string')
 # 动态语言和静态语言最大的不同，就是函数和类的定义，不是编译时定义的，而是运行时动态创建的
 class Hello(object):
     def hello(self, name='world'):
-        print 'Hello, %s.' % name
+        print('Hello, %s.' % name)
 h = Hello()
 h.hello()
-print type(Hello)
-print type(h)
+print(type(Hello))
+print(type(h))
 # type()函数可以查看一个类型或变量的类型，Hello是一个class，它的类型就是type，而h是一个实例，它的类型就是class.Hello
 
 # class的定义是运行时动态创建的，而创建class的方法就是使用type()函数
 # type()函数既可以返回一个对象的类型，又可以创建出新的类型
 def fn(self, name='world'):
-    print 'Hello, %s.(Created by type())' % name
+    print('Hello, %s.(Created by type())' % name)
 Hello = type('Hello', (object,), dict(hello=fn))
 h = Hello()
 h.hello()
-print type(Hello)
-print type(h)
+print(type(Hello))
+print(type(h))
 # 要创建一个class对象，type()函数依次传入3个参数
 # 1.class的名称
 # 2.继承的父类集合，注意Python支持多重继承，如果只有一个父类，要注意tuple的单元素写法
@@ -398,7 +398,7 @@ class MyList(list):
 # 4.类的方法集合
 L = MyList()
 L.add(1)
-print L
+print(L)
 l = list()
 #l.add(1) # 普通list没有add()方法
 
@@ -426,7 +426,7 @@ class ModelMetaclass(type):
         mappings = dict()
         for k, v in attrs.iteritems():
             if isinstance(v, Field):
-                print 'Found mapping: %s --> %s' % (k, v)
+                print('Found mapping: %s --> %s' % (k, v))
                 mappings[k] = v
         for k in mappings.iterkeys():
             attrs.pop(k)
@@ -454,8 +454,8 @@ class Model(dict):
             params.append('?')
             args.append(getattr(self, k, None))
         sql = 'insert into %s (%s) values (%s)' % (self.__table__, ', '.join(fields), ', '.join(params))
-        print 'SQL: %s' % sql
-        print 'ARGS: %s' % str(args)
+        print('SQL: %s' % sql)
+        print('ARGS: %s' % str(args))
 # 然后定义User实体
 class User(Model):
     # 定义类的属性到列的映射
@@ -476,19 +476,19 @@ class Student(object):
 # 创建实例
 s = Student()
 # 打印name属性，因实例并没有name属性，所以会继续查找class的name属性
-print s.name
+print(s.name)
 # 这和调用Student.name是一样的
-print Student.name
+print(Student.name)
 # 给实例绑定name属性
 s.name = 'Michael'
 # 由于实例属性优先级比类属性高，因此，它会屏蔽掉类的name属性
-print s.name
+print(s.name)
 # 但是类属性并未消失，用Student.name仍然可以访问
-print Student.name
+print(Student.name)
 # 如果删除实例的name属性
 del s.name
 # 再次调用s.name，由于实例的name属性没有找到，类的name属性就显示出来了
-print s.name
+print(s.name)
 
 # 因此，在编写程序的时候，千万不要把实例属性和类属性使用相同的名字
 # 上例的ORM编写的ModelMetaclass会删除掉User类的所有类属性，目的就是避免造成混淆

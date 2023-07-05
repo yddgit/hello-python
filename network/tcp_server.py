@@ -17,11 +17,11 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('127.0.0.1', 9999))
 # 开始监听端口，传入的参数指定等待连接的最大数量
 s.listen(5)
-print 'Waiting for connection...'
+print('Waiting for connection...')
 # 连接建立后，服务器先发一条欢迎消息，然后等待客户端数据，并加上Hello再发送给客户端
 # 如果客户端发送了exit字符串，就直接关闭连接
 def tcplink(sock, addr):
-    print 'Accept new connection from %s:%s...' % addr
+    print('Accept new connection from %s:%s...' % addr)
     sock.send('Welcome!')
     while True:
         data = sock.recv(1024)
@@ -30,7 +30,7 @@ def tcplink(sock, addr):
             break
         sock.send('Hello, %s!' % data)
     sock.close()
-    print 'Connection from %s:%s closed.' % addr
+    print('Connection from %s:%s closed.' % addr)
 # 通过循环来接受客户端连接，accept()会等待并返回一个客户端连接
 while True:
     sock, addr = s.accept() # 接受一个新连接

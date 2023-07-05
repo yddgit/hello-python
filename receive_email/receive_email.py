@@ -25,16 +25,16 @@ server = poplib.POP3_SSL(pop3_server)
 # 打开调试信息
 server.set_debuglevel(1)
 # 打印POP3服务器的欢迎文字
-print server.getwelcome()
+print(server.getwelcome())
 # 身份认证
 server.user(email)
 server.pass_(password)
 # stat()返回邮件数量和占用空间
-print 'Message: %s. Size: %s' % server.stat()
+print('Message: %s. Size: %s' % server.stat())
 # list()返回所有邮件的编号
 resp, mails, octets = server.list()
 # 可以查看返回的列表类似['1 82923', '2 2184']
-print mails
+print(mails)
 # 获取最新一封邮件，注意索引号从1开始
 index = len(mails)
 resp, lines, octets = server.retr(index)
@@ -86,14 +86,14 @@ def print_info(msg, indent=0):
                     hdr, addr = parseaddr(value)
                     name = decode_str(hdr)
                     value = u'%s <%s>' % (name, addr)
-            print '%s%s: %s' % ('  ' * indent, header, value)
+            print('%s%s: %s' % ('  ' * indent, header, value))
     if (msg.is_multipart()):
         # 如果邮件对象是一个MIMEMultipart
         # get_payload()返回list，包含所有子对象
         parts = msg.get_payload()
         for n, part in enumerate(parts):
-            print '%spart %s' % ('  ' * indent, n)
-            print '%s-------------------' % ('  ' * indent)
+            print('%spart %s' % ('  ' * indent, n))
+            print('%s-------------------' % ('  ' * indent))
             # 递归打印每个子对象
             print_info(part, indent + 1)
     else:
@@ -106,10 +106,10 @@ def print_info(msg, indent=0):
             charset = guess_charset(msg)
             if charset:
                 content = content.decode(charset)
-            print '%sText: %s' % ('  ' * indent, content + '...')
+            print('%sText: %s' % ('  ' * indent, content + '...'))
         else:
             # 不是文本，作为附件处理
-            print '%sAttachment: %s' % ('  ' * indent, content_type)
+            print('%sAttachment: %s' % ('  ' * indent, content_type))
 
 # 打印邮件内容
 print_info(msg)

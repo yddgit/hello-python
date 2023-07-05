@@ -15,7 +15,7 @@ from sklearn import datasets
 knn = neighbors.KNeighborsClassifier()
 # load iris dataset
 iris = datasets.load_iris()
-#print iris
+#print(iris)
 # use knn
 knn.fit(iris.data, iris.target)
 # predict

@@ -13,12 +13,12 @@ p = (1, 2)
 from collections import namedtuple
 Point = namedtuple('Point', ['x', 'y'])
 p = Point(1, 2)
-print p.x
-print p.y
+print(p.x)
+print(p.y)
 # namedtuple是一个函数，用来创建一个自定义的tuple对象，规定了tuple元素的个数，并可以用属性而不是索引来引用tuple的某个元素
 # 这样，用namedtuple可以很方便的定义一种数据类型
-print isinstance(p, Point)
-print isinstance(p, tuple)
+print(isinstance(p, Point))
+print(isinstance(p, tuple))
 # 类似的，用坐标和半径表示一个圆
 Circle = namedtuple('Circle', ['x', 'y', 'r'])
 
@@ -29,11 +29,11 @@ from collections import deque
 q = deque(['a', 'b', 'c'])
 q.append('x')
 q.appendleft('y')
-print q
+print(q)
 q.pop()
-print q
+print(q)
 q.popleft()
-print q
+print(q)
 
 # defaultdict
 
@@ -41,8 +41,8 @@ print q
 from collections import defaultdict
 dd = defaultdict(lambda: 'N/A')
 dd['key1'] = 'abc'
-print dd['key1'] # key1存在
-print dd['key2'] # key2不存在，返回默认值
+print(dd['key1']) # key1存在
+print(dd['key2']) # key2不存在，返回默认值
 # 注意默认值是调用函数返回的，而函数在创建defaultdict对象时传入
 # 除了Key不存在时返回默认值，defaultdict的其他行为和dict是完全一样的
 
@@ -51,15 +51,15 @@ print dd['key2'] # key2不存在，返回默认值
 # 使用dict时，Key是无序的，做迭代时无法确定Key的顺序，如果要保持Key的顺序，可以用OrderedDict
 from collections import OrderedDict
 d = dict([('a', 1), ('b', 2), ('c', 3)])
-print d # dict的Key是无序的
+print(d) # dict的Key是无序的
 od = OrderedDict([('a', 1), ('b', 2), ('c', 3)])
-print od # OrderedDict的Key是有序的
+print(od) # OrderedDict的Key是有序的
 # OrderedDict的Key会按照插入的顺序排列，不是Key本身排序
 od = OrderedDict()
 od['z'] = 1
 od['y'] = 2
 od['x'] = 3
-print od.keys() # 按照插入的Key的顺序返回
+print(od.keys()) # 按照插入的Key的顺序返回
 # OrderedDict可以实现一个FIFO（先进先出）的dict，当容量超出限制时，先删除最早添加的Key
 from collections import OrderedDict
 class LastUpdatedOrderedDict(OrderedDict):
@@ -70,12 +70,12 @@ class LastUpdatedOrderedDict(OrderedDict):
         containsKey = 1 if key in self else 0
         if len(self) - containsKey >= self.__capacity:
             last = self.popitem(last=False)
-            print 'remove:', last
+            print('remove:', last)
         if containsKey:
             del self[key]
-            print 'set:', (key, value)
+            print('set:', (key, value))
         else:
-            print 'add:', (key, value)
+            print('add:', (key, value))
         OrderedDict.__setitem__(self, key, value)
 fifo = LastUpdatedOrderedDict(3)
 fifo['A'] = 1
@@ -83,7 +83,7 @@ fifo['B'] = 2
 fifo['C'] = 3
 fifo['C'] = 4
 fifo['D'] = 5
-print fifo
+print(fifo)
 
 # Counter
 
@@ -92,7 +92,7 @@ from collections import Counter
 c = Counter()
 for ch in 'programming':
     c[ch] = c[ch] + 1
-print c
+print(c)
 # Counter实际上也是dict的一个子类
 
 
@@ -109,19 +109,19 @@ print c
 
 # Python内置base64可以直接进行base64的编解码
 import base64
-print base64.b64encode('binary\x00string')
-print base64.b64decode('YmluYXJ5AHN0cmluZw==')
+print(base64.b64encode('binary\x00string'))
+print(base64.b64decode('YmluYXJ5AHN0cmluZw=='))
 # 由于标准的Base64编码后可能出现字符+和/，URL中不能直接作为参数，所以又有一种urlsafe的base64编码，就是把+和/变成-和_
-print base64.b64encode('i\xb7\x1d\xfb\xef\xff')
-print base64.urlsafe_b64encode('i\xb7\x1d\xfb\xef\xff')
-print base64.urlsafe_b64decode('abcd--__')
+print(base64.b64encode('i\xb7\x1d\xfb\xef\xff'))
+print(base64.urlsafe_b64encode('i\xb7\x1d\xfb\xef\xff'))
+print(base64.urlsafe_b64decode('abcd--__'))
 # 还可以自己定义64个字符的排列顺序，这样就可以自定义Base64编码，不过通常没有必要
 
 # Base64不能用于加密，适用于小段内容的编码，如数字证书签名、Cookie的内容等
 # 由于=字符也可能出现的Base64编码中，但=用在URL、Cookie里会造成歧义，所以，很多Base64编码会把=去掉
 # 去掉=后，因为Base64是把3个字节变成4个字节，所以Base64编码的长度永远是4的倍数，因此加上=把Base64字符串的长度变为4的倍数，就可以正常解码了
-print base64.b64decode('YWJjZA==')
-#print base64.b64decode('YWJjZA')
+print(base64.b64decode('YWJjZA=='))
+#print(base64.b64decode('YWJjZA'))
 def safe_b64decode(base64str):
     append_num = 4 - len(base64str) % 4
     temp64str = base64str
@@ -129,7 +129,7 @@ def safe_b64decode(base64str):
         for i in range(append_num):
             temp64str += '='
     return base64.b64decode(temp64str)
-print safe_b64decode('YWJjZA')
+print(safe_b64decode('YWJjZA'))
 
 # struct
 
@@ -137,10 +137,10 @@ print safe_b64decode('YWJjZA')
 # Python提供了一个struct模块来解决str和其他二进制数据类型的转换
 import struct
 # struct的pack()函数把任意数据类型变成字符串
-print struct.pack('>I', 10240099)
+print(struct.pack('>I', 10240099))
 # pack的第一个参数是处理指令，'>I'表示：>表示字节顺序是big-endian，也就是网络序，I表示4字节无符号整数。后面的参数个数要和处理指令一致
 # unpack函数把str变成相应的数据类型
-print struct.unpack('>IH', '\xf0\xf0\xf0\xf0\x80\x80')
+print(struct.unpack('>IH', '\xf0\xf0\xf0\xf0\x80\x80'))
 # 根据>IH的说明，后面的str依次变为I（4字节无符号整数）和H（2字节无符号整数）
 
 # Python虽然不适合编写操作字节流的代码，但在对性能要求不高的地方，用struct就方便多了
@@ -150,7 +150,7 @@ print struct.unpack('>IH', '\xf0\xf0\xf0\xf0\x80\x80')
 # Windows的位图文件（.bmp）是一种非常简单的文件格式，读入前30个字节来分析：
 with open('test.bmp', 'r') as f:
     s = f.read(30)
-    print struct.unpack('<ccIIIIIIHH', s)
+    print(struct.unpack('<ccIIIIIIHH', s))
 
 # BMP格式采用小端方式存储数据，文件头的结构按顺序如下：
 # 两个字节：'BM'表示Windows位图，'BA'表示OS/2位置
@@ -174,18 +174,18 @@ import hashlib
 # 计算一个字符串的MD5值
 md5 = hashlib.md5()
 md5.update('how to use md5 in python hashlib?')
-print md5.hexdigest()
+print(md5.hexdigest())
 # 如果数据量大，可以分块多次调用update()，计算结果一样
 md5 = hashlib.md5()
 md5.update('how to use md5 in ')
 md5.update('python hashlib?')
-print md5.hexdigest()
+print(md5.hexdigest())
 
 # SHA1调用与MD5类似，结果是160bit字节，通常用一个40位的16进制字符串表示
 sha1 = hashlib.sha1()
 sha1.update('how to use md5 in ')
 sha1.update('python hashlib?')
-print sha1.hexdigest()
+print(sha1.hexdigest())
 # SHA256和SHA512比SHA1更安全，不过越安全的算法越慢，而且摘要长度更长
 
 # 摘要算法的应用
@@ -211,8 +211,8 @@ def login(user, password):
         return True
     else:
         return False
-print login('michael', 'michael')
-print login('michael', '123456')
+print(login('michael', 'michael'))
+print(login('michael', '123456'))
 
 # 由于常用口令的MD5很容易计算，所以要确保存储的用户口令不是那些已经被计算出来的常用口令的MD5，通过对原始口令加一个复杂字符串来实现，俗称“加盐”
 def calc_md5_with_salt(password):
@@ -228,49 +228,49 @@ import itertools
 # count()会创建一个无限的迭代器
 natuals = itertools.count(1)
 #for n in natuals:
-#    print n
+#    print(n)
 
 # cycle()会把传入的一个序列无限重复下去
 cs = itertools.cycle('ABC')
 #for c in cs:
-#    print c
+#    print(c)
 
 # repeat()负责把一个元素无限重复下去，如果提供第二个参数就可以限定重复次数
 ns = itertools.repeat('A', 5)
 for n in ns:
-    print n
+    print(n)
 
 # 无限序列只有在for迭代时才会无限地迭代下去，如果只是创建一个迭代对象，并不会事先把无限个元素生成出来
 # 无限序列通常会通过takewhile()等函数根据条件判断来截取出一个有限的序列
 nutuals = itertools.count(1)
 ns = itertools.takewhile(lambda x: x <= 10, natuals)
 for n in ns:
-    print n
+    print(n)
 
 # itertools提供的几个迭代器操作函数更加有用
 
 # chain()可以把一组迭代对象串联起来，形成一个更大的迭代器
 for c in itertools.chain('ABC', 'XYZ'):
-    print c
+    print(c)
 
 # groupby()把迭代器中相邻的重复元素挑出来放在一起
 for key, group in itertools.groupby('AAABBBCCAAA'):
-    print key, list(group)
+    print(key, list(group))
 # 实际上挑选规则是通过函数完成的，只要作用于函数的两个元素返回值相符，这两个元素就被认为是在一组的，而函数返回值作为组的key
 for key, group in itertools.groupby('AaaBBbcCAAa', lambda c: c.upper()):
-    print key, list(group)
+    print(key, list(group))
 
 # imap()和map()的区别在于，imap()可以作用于无穷序列，并且两个序列长度不一致，以短的为准
 for x in itertools.imap(lambda x, y: x * y, [10, 20, 30], itertools.count(1)):
-    print x
+    print(x)
 # 注意：imap()返回一个迭代对象，而map()返回list。当调用map()时，已经计算完毕
-print map(lambda x: x*x, [1, 2, 3])
+print(map(lambda x: x*x, [1, 2, 3]))
 # 而当调用imap()时，并没有进行任何计算
 r = itertools.imap(lambda x: x*x, [1, 2, 3])
-print r
+print(r)
 # 必须用for循环对r进行迭代，才会在每次循环过程中计算出下一个元素
 for x in r:
-    print x
+    print(x)
 # 这就说明imap()实现了“惰性计算”，类似imap()这样能够实现惰性计算的函数就可以处理无限序列
 
 # ifilter()就是filter()的惰性实现
@@ -292,11 +292,11 @@ from xml.parsers.expat import ParserCreate
 
 class DefaultSaxHandler(object):
     def start_element(self, name, attrs):
-        print 'sax:start_element: %s, attrs: %s' % (name, str(attrs))
+        print('sax:start_element: %s, attrs: %s' % (name, str(attrs)))
     def end_element(self, name):
-        print 'sax:end_element: %s' % name
+        print('sax:end_element: %s' % name)
     def char_data(self, text):
-        print 'sax:char_data: %s' % text
+        print('sax:char_data: %s' % text)
 xml = r'''<?xml version="1.0"?>
 <ol>
     <li><a href="/python">Python</a></li>
@@ -320,7 +320,7 @@ L.append(r'<?xml version="1.0"?>')
 L.append(r'<root>')
 L.append('some &amp; data') # L.append(encode('some & data'))
 L.append(r'</root>')
-print ''.join(L)
+print(''.join(L))
 # 建议不要用XML，改成JSON
 
 # HTMLParser
@@ -333,19 +333,19 @@ from htmlentitydefs import name2codepoint
 
 class MyHTMLParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
-        print '<%s>' % tag
+        print('<%s>' % tag)
     def handle_endtag(self, tag):
-        print '<%s>' % tag
+        print('<%s>' % tag)
     def handle_startendtag(self, tag, attrs):
-        print '<%s/>' % tag
+        print('<%s/>' % tag)
     def handle_data(self, data):
-        print '%s' % data
+        print('%s' % data)
     def handle_comment(self, data):
-        print '<!-- %s -->' % data
+        print('<!-- %s -->' % data)
     def handle_entityref(self, name):
-        print '&%s;' % name
+        print('&%s;' % name)
     def handle_charref(self, name):
-        print '&#%s;' % name
+        print('&#%s;' % name)
 parser = MyHTMLParser()
 parser.feed('<html><head></head><body><p>Some <a href=\"#\">html</a> tutorial...<br>END</p></body></html>')
 
@@ -378,7 +378,7 @@ class PyHTMLParser(HTMLParser):
 
     def handle_endtag(self, tag):
         if len(self.__event_info) > 0:
-            print ''.join(self.__event_info)
+            print(''.join(self.__event_info))
             self.__event_info = []
 
     def handle_data(self, data):

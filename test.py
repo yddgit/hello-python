@@ -8,51 +8,51 @@
 # 如果出错，后续代码不会继续执行，而是直接跳转至错误处理代码，即except语句块，
 # 执行完except后，如果有finally语句块，则执行finally语句块，至此，执行完毕
 try:
-    print 'try...'
+    print('try...')
     r = 10 / 0
-    print 'result:', r
+    print('result:', r)
 except ZeroDivisionError, e:
-    print 'except:', e
+    print('except:', e)
 finally:
-    print 'finally...'
-print 'END'
+    print('finally...')
+print('END')
 # 以上，当错误发生时，后续代码并没有被执行，最后finally语句被执行
 
 # 多个except语句块处理不同类型的错误
 try:
-    print 'try...'
+    print('try...')
     r = 10 / int('a')
-    print 'result:', r
+    print('result:', r)
 except ValueError, e:
-    print 'ValueError:', e
+    print('ValueError:', e)
 except ZeroDivisionError, e:
-    print 'ZeroDivisionError:', e
+    print('ZeroDivisionError:', e)
 finally:
-    print 'finally...'
-print 'END'
+    print('finally...')
+print('END')
 
 # 如果没有错误发生，还可以在except语句块后面增加一个else，当没有错误发生时会自动执行else语句
 try:
-    print 'try...'
+    print('try...')
     r = 10 / 2
-    print 'result:', r
+    print('result:', r)
 except ValueError, e:
-    print 'ValueError:', e
+    print('ValueError:', e)
 except ZeroDivisionError, e:
-    print 'ZeroDivisionError:', e
+    print('ZeroDivisionError:', e)
 else:
-    print 'no error!'
+    print('no error!')
 finally:
-    print 'finally...'
-print 'END'
+    print('finally...')
+print('END')
 
 # Python所有的错误类型都继承自BaseException，所以在except时，不但捕获该类型的错误，还会把其子类也“一网打尽”
 try:
-    print 'foo'
+    print('foo')
 except StandardError, e:
-    print 'StandardError'
+    print('StandardError')
 except ValueError, e:
-    print 'ValueError'
+    print('ValueError')
 # 上面的第二个except永远也得不到执行，因为ValueError是StandardError的子类
 
 # 常见的错误类型和继承关系参考官方文档：
@@ -67,9 +67,9 @@ def main():
     try:
         foo('0')
     except StandardError, e:
-        print 'Error!'
+        print('Error!')
     finally:
-        print 'finally...'
+        print('finally...')
 main()
 # 即不需要在每个可能出错的地方去捕获错误，只要在合适的层次去捕获错误就可以了
 
@@ -93,7 +93,7 @@ def main():
     except StandardError, e:
         logging.exception(e)
 main()
-print 'END'
+print('END')
 # 同样是出错，但程序打印完成错误信息后会继续执行，并正常退出
 # 通过配置，logging还可以把错误记录到日志文件里，方便事后排查
 
@@ -119,7 +119,7 @@ def bar(s):
     try:
         return foo(s) * 2
     except StandardError, e:
-        print 'Error!'
+        print('Error!')
         raise
 def main():
     bar('0')
@@ -139,7 +139,7 @@ def foo():
 # 可以用print语句，但调试完后还要一一删除
 def foo(s):
     n = int(s)
-    print '>>> n = %d' % n
+    print('>>> n = %d' % n)
     return 10 / n
 #foo('0')
 
@@ -160,7 +160,7 @@ logging.basicConfig(level=logging.INFO)
 def foo(s):
     n = int(s)
     logging.info('n = %d' % n)
-    print 10 / n
+    print(10 / n)
 #foo('0')
 
 # Python调试器pdb
@@ -177,7 +177,7 @@ import pdb
 s = '0'
 n = int(s)
 #pdb.set_trace()
-#print 10 / n
+#print(10 / n)
 # 程序自动在pdb.set_trace()暂停并进入pdb调试环境，可以用p命令查看变量或者用c命令继续执行
 
 # 如果要比较方便的设置断点、单步执行，就需要一个IDE
@@ -240,12 +240,12 @@ class TestDemo(unittest.TestCase):
 # 可以在单元测试中编写两个特殊的setUp()和tearDown()方法，这两个方法每调用一个测试方法的前后分别被执行
 class TestSetUpTearDown(unittest.TestCase):
     def setUp(self):
-        print 'setUp...'
+        print('setUp...')
     def tearDown(self):
-        print 'tearDown...'
+        print('tearDown...')
     def test_run(self):
         self.assertEqual(max((1,2,3,4)), 4)
-        print 'test case finished'
+        print('test case finished')
 
 # 文档测试
 

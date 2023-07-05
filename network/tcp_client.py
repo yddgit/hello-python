@@ -27,7 +27,7 @@ data = ''.join(buffer)
 s.close()
 # 接收到的数据包括HTTP头和网页本身，只需要把HTTP头和网页分离，打印HTTP头，保存网页内容到文件
 header, html = data.split('\r\n\r\n', 1)
-print header
+print(header)
 # 把接收的数据写入文件
 #with open('baidu.html', 'wb') as f:
 #    f.write(html)
@@ -38,10 +38,10 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # 建立连接
 s.connect(('127.0.0.1', 9999))
 # 接收欢迎消息
-print s.recv(1024)
+print(s.recv(1024))
 for data in ['Michael', 'Tracy', 'Sarah']:
     s.send(data) # 发送数据
-    print s.recv(1024)
+    print(s.recv(1024))
 s.send('exit')
 s.close()
 

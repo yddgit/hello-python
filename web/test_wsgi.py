@@ -44,7 +44,7 @@ from wsgiref.simple_server import make_server
 
 # 创建一个服务器，IP地址为空，商品是8000，处理函数是application
 httpd = make_server('', 8000, application)
-print 'Serving HTTP on port 8000...'
+print('Serving HTTP on port 8000...')
 # 开始监听HTTP请示
 httpd.serve_forever()
 

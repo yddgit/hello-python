@@ -6,31 +6,31 @@
 # 可以在交互式命令行通过help(function_name)查看function_name函数的帮助信息
 
 # abs求绝对值
-print abs(100)
-print abs(-20)
-print abs(12.34)
+print(abs(100))
+print(abs(-20))
+print(abs(12.34))
 # 调用函数时如果传入的参数数量不对，会报TypeError的错误，并明确提示参数个数不正确
 #abs(1, 2)
 # 如果参数数量是对的，但参数类型不对，则会提示参数类型错误
 #abs('a')
 
 # 比较函数cmp(x, y)，如果x<y返回-1，如果x==y返回0，如果x>y，返回1
-print cmp(1, 2)
-print cmp(2, 1)
-print cmp(3, 3)
+print(cmp(1, 2))
+print(cmp(2, 1))
+print(cmp(3, 3))
 
 # 数据类型转换函数，如int()将其他数据类型转换为整数
-print int('123')
-print int(12.34)
-print float('12.34')
-print str(1.23)
-print unicode(100)
-print bool(1)
-print bool('')
+print(int('123'))
+print(int(12.34))
+print(float('12.34'))
+print(str(1.23))
+print(unicode(100))
+print(bool(1))
+print(bool(''))
 
 # 函数名其实就是指向一个函数对象的引用，完全可以把函数名赋给一个变量，相当于给函数起了一个别名
 a = abs # 变量a指向abs函数
-print a(-1) # 所以也可以通过a调用abs函数
+print(a(-1)) # 所以也可以通过a调用abs函数
 
 # 定义函数
 # Python中，定义函数使用def语句，然后在缩进块中编写函数体，函数返回值用return语句返回
@@ -40,7 +40,7 @@ def my_abs(x):
     else:
         return -x
 # 调用函数
-print my_abs(-45)
+print(my_abs(-45))
 # 函数体内部在语句执行时，执行到return时，函数就执行完毕，并将结果返回
 # 如果没有return语句，函数执行完毕后也会返回结果，只是结果为None，return None可以简写为return
 
@@ -54,10 +54,10 @@ if age >= 18:
 
 # 参数检查
 # 调用函数时，如果参数个数不对，Python解释器会自动检查，并抛出TypeError
-#print my_abs(1, 2)
+#print(my_abs(1, 2))
 # 但是如果参数类型不对，Python解释器无法检查，如下：当传入了不恰当的参数时，内置函数abs会检查参数错误，但my_abs没有参数检查
-#print my_abs('A')
-#print abs('A')
+#print(my_abs('A'))
+#print(abs('A'))
 
 # 给my_abs添加参数检查，只允许整数和浮点数类型的参数，数据类型检查可以用内置函数isinstance实现
 def my_abs1(x):
@@ -67,7 +67,7 @@ def my_abs1(x):
         return x
     else:
         return -x
-#print my_abs1('A')
+#print(my_abs1('A'))
 
 # 返回多个值
 import math
@@ -76,11 +76,11 @@ def move(x, y, step, angle=0):
     ny = y + step * math.sin(angle)
     return nx, ny
 x, y = move(100, 100, 60, math.pi / 6)
-print x, y
+print(x, y)
 # 其实Python函数返回的仍然是单一值，tuple类型
 # 但在语法上，返回tuple可以省略括号，而多个变量可以同时接收一个tuple，按位置赋给对应的值
 r = move(100, 100, 60, math.pi / 6)
-print r
+print(r)
 
 # 函数小结：
 # 1.定义函数时，需要确定函数名和参数个数
@@ -99,17 +99,17 @@ def power(x, n=2):
         n = n - 1
         s = s * x
     return s
-print power(5) # 相当于power(5, 2)
-print power(5, 3)
+print(power(5)) # 相当于power(5, 2)
+print(power(5, 3))
 # 必选参数在前，默认参数在后，否则Python的解释器会报错
 # 设置默认参数时，把变化大的参数放前面，变化小的参数放后面
 # 使用默认参数最大的好处是能降低调用函数和难度
 def enroll(name, gender, age=6, city='Beijing'):
-    print '--------------'
-    print 'name =', name
-    print 'gender =', gender
-    print 'age =', age
-    print 'city =', city
+    print('--------------')
+    print('name =', name)
+    print('gender =', gender)
+    print('age =', age)
+    print('city =', city)
 enroll('Sarah', 'F')
 enroll('Bob', 'M', 7)
 enroll('Adam', 'M', city='Tianjin')
@@ -120,11 +120,11 @@ enroll('Adam', 'M', city='Tianjin')
 def add_end(L = []):
     L.append('END')
     return L
-print add_end([1, 2, 3]) # [1, 2, 3, 'END']
-print add_end(['x', 'y', 'z']) # ['x', 'y', 'z', 'END']
-print add_end() # ['END']
-print add_end() # ['END', 'END']
-print add_end() # ['END', 'END', 'END']
+print(add_end([1, 2, 3])) # [1, 2, 3, 'END']
+print(add_end(['x', 'y', 'z'])) # ['x', 'y', 'z', 'END']
+print(add_end()) # ['END']
+print(add_end()) # ['END', 'END']
+print(add_end()) # ['END', 'END', 'END']
 # Python函数在定义的时候，默认参数L就计算出来了，即[]，因为默认参数L也是一个变量，它指向对象[]
 # 每次调用该函数，如果改变了L的内容，则下次调用时，默认参数的内容就变了，不再是函数定义时的[]了
 # 所以，默认参数必须指向不变对象！！
@@ -135,8 +135,8 @@ def add_end1(L = None):
     L.append('END')
     return L
 # 此时无论调用多少次，都不会有问题
-print add_end1()
-print add_end1()
+print(add_end1())
+print(add_end1())
 
 # 可变参数，即传入的参数个数是可变的
 # 如：计算a^2 + b^2 + c^2 + ...
@@ -147,17 +147,17 @@ def calc(*numbers):
     for n in numbers:
         sum = sum + n * n
     return sum
-print calc(1, 2)
-print calc(1, 2, 3)
-print calc(1, 3, 5, 7)
-print calc()
+print(calc(1, 2))
+print(calc(1, 2, 3))
+print(calc(1, 3, 5, 7))
+print(calc())
 # 如果已经有一个list或tuple，则可以在变量前加*号，把list或tuple的元素变成可变参数传给函数
 nums = [1, 2, 3]
-print calc(*nums)
+print(calc(*nums))
 
 # 关键字参数，传入0个或任意个包含参数名的参数，这些关键字参数在函数内部自动组装为一个dict
 def person(name, age, **kw):
-    print 'name:', name, 'age:', age, 'other', kw
+    print('name:', name, 'age:', age, 'other', kw)
 # 函数person除了必选参数name和age外，还接受关键字参数kw，在调用该函数时，可以只传入必选参数
 person('Michael', 30)
 # 也可以传入任意个数的关键字参数
@@ -171,7 +171,7 @@ person('Jack', 24, **kw)
 # 在Python中定义函数，可以用必选参数、默认参数、可变参数和关键字参数，这4种参数都可以一起使用，或者只用其中几种
 # 但必须保证参数顺序：必选参数、默认参数、可变参数、关键字参数
 def func(a, b, c=0, *args, **kw):
-    print 'a =', a, 'b =', b, 'c =', c, 'args =', args, 'kw =', kw
+    print('a =', a, 'b =', b, 'c =', c, 'args =', args, 'kw =', kw)
 func(1, 2)
 func(1, 2, c=3)
 func(1, 2, 3, 'a', 'b')
@@ -196,11 +196,11 @@ def fact(n):
     if n == 1:
         return 1
     return n * fact(n-1)
-print fact(1)
-print fact(5)
-print fact(100)
+print(fact(1))
+print(fact(5))
+print(fact(100))
 # 使用递归函数需要注意防止栈溢出
-#print fact(1000)
+#print(fact(1000))
 
 # 解决递归调用栈溢出的方法是通过尾递归优化。尾递归是指在函数返回的时候，调用自身本身，并且，return语句不能包含表达式。
 # 这样，编译器或者解释器就可以把尾递归做优化，使递归本身无论调用多少次，都只占用一个栈帧，不会出现栈溢出的情况。
@@ -211,7 +211,7 @@ def fact_iter(num, product):
     if num == 1:
         return product
     return fact_iter(num - 1, num * product)
-print fact1(5)
+print(fact1(5))
 
 # 尾递归调用时，如果做了优化，栈不会增长，因此，无论多少次调用也不会栈溢出
 # 遗憾的是，大多数编程语言没有针对尾递归做优化，Python解释器也没有做优化

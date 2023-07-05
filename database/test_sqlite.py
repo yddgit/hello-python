@@ -18,9 +18,9 @@ try:
     # 继续执行一条SQL，插入一条记录
     cursor.execute('insert into user (id, name) values (\'1\', \'Michael\')')
     # 通过rowcount获得插入的行数
-    print cursor.rowcount
+    print(cursor.rowcount)
 except sqlite3.Error, e:
-    print e
+    print(e)
 finally:
     # 关闭Cursor
     cursor.close()
@@ -37,9 +37,9 @@ try:
     cursor.execute('select * from user where id = ?', ('1',))
     # 获得查询结果
     values = cursor.fetchall()
-    print values
+    print(values)
 except sqlite3.Error, e:
-    print e
+    print(e)
 finally:
     cursor.close()
     conn.close()

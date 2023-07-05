@@ -13,12 +13,12 @@
 # Python的os模块封装了常见的系统调用，其中就包括fork，在Python程序中轻松创建子进程
 
 #import os
-#print 'Process (%s) start...' % os.getpid()
+#print('Process (%s) start...' % os.getpid())
 #pid = os.fork()
 #if pid == 0:
-#    print 'I am child process (%s) and my parent is %s.' % (os.getpid(), os.getppid())
+#    print('I am child process (%s) and my parent is %s.' % (os.getpid(), os.getppid()))
 #else:
-#    print 'I (%s) just created a child process (%s).' % (os.getpid(), pid)
+#    print('I (%s) just created a child process (%s).' % (os.getpid(), pid))
 
 # 由于Windows没有fork调用，上面的代码在Windows上无法运行
 # 有了fork调用，一个进程在接到新任务时就可以复制出一个子进程来处理新任务。
@@ -31,14 +31,14 @@
 #from multiprocessing import Process
 #import os
 #def run_proc(name):
-#    print 'Run child process %s (%s)...' % (name, os.getpid())
+#    print('Run child process %s (%s)...' % (name, os.getpid()))
 #if __name__ == '__main__':
-#    print 'Parent process %s.' % os.getpid()
+#    print('Parent process %s.' % os.getpid())
 #    p = Process(target=run_proc, args=('test',))
-#    print 'Process will start.'
+#    print('Process will start.')
 #    p.start()
 #    p.join()
-#    print 'Process end.'
+#    print('Process end.')
 
 # 以上代码执行时因为2.7.x的一个bug，需要带-O参数：python -O thread.py（感觉是一个assert语句有问题）
 # 创建子进程时，只需要传入一个执行函数和函数的参数，创建一个Process实例，用start()方法启动。
@@ -49,20 +49,20 @@
 #from multiprocessing import Pool
 #import os, time, random
 #def long_time_task(name):
-#    print 'Run task %s (%s)...' % (name, os.getpid())
+#    print('Run task %s (%s)...' % (name, os.getpid()))
 #    start = time.time()
 #    time.sleep(random.random() * 3)
 #    end = time.time()
-#    print 'Task %s runs %0.2f seconds.' % (name, (end - start))
+#    print('Task %s runs %0.2f seconds.' % (name, (end - start)))
 #if __name__ == '__main__':
-#    print 'Parent process %s.' % os.getpid()
+#    print('Parent process %s.' % os.getpid())
 #    p = Pool()
 #    for i in range(5):
 #        p.apply_async(long_time_task, args=(i,))
-#    print 'Waiting for all subprocesses done...'
+#    print('Waiting for all subprocesses done...')
 #    p.close()
 #    p.join()
-#    print 'All subprocesses done.'
+#    print('All subprocesses done.')
 
 # 以上代码执行时也要带上-O参数：python -O thread.py
 # 对Pool对象调用join()方法会等待所有子进程执行完毕。
@@ -80,14 +80,14 @@
 # 写数据进程执行的代码
 #def write(q):
 #    for value in ['A', 'B', 'C', 'D']:
-#        print 'Put %s to queue...' % value
+#        print('Put %s to queue...' % value)
 #        q.put(value)
 #        time.sleep(random.random())
 # 读数据进程执行的代码
 #def read(q):
 #    while True:
 #        value = q.get(True)
-#        print 'Get %s from queue.' % value
+#        print('Get %s from queue.' % value)
 #if __name__ == '__main__':
 #    # 父进程创建Queue，并传给各个子进程
 #    q = Queue()
@@ -115,18 +115,18 @@
 import time, threading
 # 新线程执行的代码
 def loop():
-    print 'thread %s is running...' % threading.current_thread().name
+    print('thread %s is running...' % threading.current_thread().name)
     n = 0
     while n < 5:
         n = n + 1
-        print 'thread %s >>> %s' % (threading.current_thread().name, n)
+        print('thread %s >>> %s' % (threading.current_thread().name, n))
         time.sleep(1)
-    print 'thread %s ended.' % threading.current_thread().name
-print 'thread %s is running...' % threading.current_thread().name
+    print('thread %s ended.' % threading.current_thread().name)
+print('thread %s is running...' % threading.current_thread().name)
 t = threading.Thread(target=loop, name='LoopThread')
 t.start()
 t.join()
-print 'thread %s ended.' % threading.current_thread().name
+print('thread %s ended.' % threading.current_thread().name)
 
 # 由于任何进程默认就会启动一个线程，该线程称为主线程，主线程又可以启动新的线程
 # Python的threading模块的current_thread()方法永远返回当前线程的实例。
@@ -154,7 +154,7 @@ t1.start()
 t2.start()
 t1.join()
 t2.join()
-print balance
+print(balance)
 
 # 以上balance值的不一致就是由于change_it()不是原子操作，而线程执行时可能中断导致的。
 # 必须确保一个线程在修改balance时别的线程不能改。
@@ -177,7 +177,7 @@ t1.start()
 t2.start()
 t1.join()
 t2.join()
-print balance
+print(balance)
 
 # 当多个线程同时执行lock.acquire()时，只有一个能成功获取锁得以继续执行，其他线程继续等待直到获得锁为止。
 # 为了防止死锁，要用try...finally来确保锁一定会被释放。
@@ -215,7 +215,7 @@ import threading
 local_school = threading.local()
 
 def process_student():
-    print 'Hello, %s (in %s)' % (local_school.student, threading.current_thread().name)
+    print('Hello, %s (in %s)' % (local_school.student, threading.current_thread().name))
 
 def process_thread(name):
     # 绑定ThreadLocal的student

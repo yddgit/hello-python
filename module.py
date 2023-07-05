@@ -62,11 +62,11 @@ import sys
 def test():
     args = sys.argv
     if len(args) == 1:
-        print 'Hello World!'
+        print('Hello World!')
     elif len(args) == 2:
-        print 'Hello %s!' % args[1]
+        print('Hello %s!' % args[1])
     else:
-        print 'Too many arguments!'
+        print('Too many arguments!')
 
 if __name__ == '__main__':
     test()
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 # 导入sys模块后，就有了变量sys指向该模块，利用sys变量，就可以访问sys模块的所有功能
 # sys模块有一个argv变量，用list存储了命令行的所有参数。
 # argv至少有一个元素，因为第一个参数永远是该.py文件的名称
-print sys.argv
+print(sys.argv)
 
 # 当在命令行运行模块文件时，Python解释器把一个特殊变量__name__置为__main__
 # 而如果在其他地方导入模块则不会设置__name__变量。
@@ -152,7 +152,7 @@ def greeting(name):
 # 使用PIL生成缩略图
 from PIL import Image
 im = Image.open('test.jpg')
-print im.format, im.size, im.mode
+print(im.format, im.size, im.mode)
 #size = (192, 108)
 #im.thumbnail(size)
 #im.save('thumb.jpg', 'JPEG')
@@ -169,7 +169,7 @@ print im.format, im.size, im.mode
 # 当加载模块时，Python会在指定的路径下搜索对应的.py文件，如果找不到就会报错
 # 默认Python解释器会搜索当前目录、所有已安装的内置模块和第三方模块，搜索路径存放在sys模块的path变量中
 import sys
-print sys.path
+print(sys.path)
 
 # 如果要添加搜索目录，可以直接修改sys.path变量。这种方法是在运行时修改，运行结束后失效
 sys.path.append('F:\\temp')
@@ -185,19 +185,19 @@ sys.path.append('F:\\temp')
 # 而在2.x中以'xxx'表示的str在3.x中就必须写成b'xxx'，以此表示二进制字符串
 # 为了适应3.x新的字符串表示方法，在2.x中可以通过unicode_literals来使用3.x的新语法
 #from __future__ import unicode_literals # 这句必须写在文件最开始
-print '\'xxx\' is unicode?', isinstance('xxx', unicode)
-print 'u\'xxx\' is unicode?', isinstance(u'xxx', unicode)
-print '\'xxx\' is str?', isinstance('xxx', str)
-print 'b\'xxx\' is unicode?', isinstance(b'xxx', str)
+print('\'xxx\' is unicode?', isinstance('xxx', unicode))
+print('u\'xxx\' is unicode?', isinstance(u'xxx', unicode))
+print('\'xxx\' is str?', isinstance('xxx', str))
+print('b\'xxx\' is unicode?', isinstance(b'xxx', str))
 
 # 类似的还有除法运算，在Python2.x中，如果是整数相除，结果仍是整数，余数会被扔掉，叫做“地板除”
-print 10 / 3
+print(10 / 3)
 # 要做精确除法，必须把其中一个数变成浮点数
-print 10.0 / 3
+print(10.0 / 3)
 # 而在Python3.x中，所有除法都是精确的除法，“地板除”用//表示
 # 如果相在2.7代码中直接使用3.x的除法，可以通过__future__模块的division实现
 #from __future__ import division # 这句必须写在文件最开始
-print '10 / 3 =', 10 / 3
-print '10.0 / 3 =', 10.0 / 3
-print '10 // 3 =', 10 // 3
+print('10 / 3 =', 10 / 3)
+print('10.0 / 3 =', 10.0 / 3)
+print('10 // 3 =', 10 // 3)
 

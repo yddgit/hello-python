@@ -10,20 +10,20 @@ f = open('test.txt', 'r')
 # 如果文件不存在会抛出IOError的错误
 #file_not_found = open('notfound.txt', 'r')
 # 打开成功，调用read()方法读取文件内容，Python把内容读到内存，用一个str对象表示
-print f.read()
+print(f.read())
 # 最后调用close()方法关闭文件
 f.close()
 
 # 由于读写时都可能产生IOError，为保证文件始终正确关闭，可以用try...finally
 try:
     f = open('test.txt', 'r')
-    print f.read()
+    print(f.read())
 finally:
     if f:
         f.close()
 # 为了方便，Python引入了with语句自动调用close()方法
 with open('test.txt', 'r') as f:
-    print f.read()
+    print(f.read())
 # 效果和try...finally一样，但代码更加简洁，不必调用f.close()方法
 
 # 调用read()方法会一次性把文件全部内容读取到内存。
@@ -34,7 +34,7 @@ with open('test.txt', 'r') as f:
 # 如果文件很小，read()一次性读取最方便，如果不能确定文件大小，反复调用read(size)，如果是配置文件，调用readlines()最方便
 with open('test.txt', 'r') as f:
     for line in f.readlines():
-        print line.strip() # 把末尾的\n去掉
+        print(line.strip()) # 把末尾的\n去掉
 
 # 类似open函数这样返回有read()方法的对象，在Python中称为file-like Object
 # 除了file外，还可以是内存的字节流、网络流、自定义流等。file-like Object不需要从特定类继承，只要写个read()方法就行
@@ -44,17 +44,17 @@ with open('test.txt', 'r') as f:
 
 # 如果要打开二进制文件，如图片、视频等，用'rb'模式打开
 with open('test.jpg', 'rb') as f:
-    print f.read(20)
+    print(f.read(20))
 
 # 字符编码
 
 # 要读取非ASCII编码的文本文件，必须以二进制模式打开，再解码
 with open('test-gbk.txt', 'rb') as f:
-    print f.read().decode('gbk')
+    print(f.read().decode('gbk'))
 # Python还提供了一个codecs模块在读文件时自动转换编码，直接读取unicode
 import codecs
 with codecs.open('test-gbk.txt', 'r', 'gbk') as f:
-    print f.read()
+    print(f.read())
 
 # 写文件时，open函数传入'w'或'wb'表示写文本文件或写二进制文件
 with open('test.txt', 'w') as f:
@@ -65,26 +65,26 @@ with codecs.open('test-gbk.txt', 'w', 'gbk') as f:
 # 操作文件和目录
 
 import os
-print os.name # 操作系统名字
-#print os.uname() # 详细系统信息（Windows上不提供）
-print os.environ # 环境变量保存在dict中
-print os.getenv('TMP') # 获取环境变量
+print(os.name) # 操作系统名字
+#print(os.uname()) # 详细系统信息（Windows上不提供）
+print(os.environ) # 环境变量保存在dict中
+print(os.getenv('TMP')) # 获取环境变量
 
 # 操作文件和目录的函数一部分放在os模块中，一部分放在os.path模块中
 
 # 查看当前目录的绝对路径
-print os.path.abspath('.')
+print(os.path.abspath('.'))
 # 在某个目录下创建一个新目录，首先把新目录的完整路径表示出来
-print os.path.join('C:\\tmp', 'testdir')
+print(os.path.join('C:\\tmp', 'testdir'))
 # 然后创建目录
 os.mkdir(os.path.join('C:\\tmp', 'testdir'))
 # 删除一个目录
 os.rmdir('C:\\tmp\\testdir')
 # 把两个路径合在一起时，不要直接拼字符串，而要通过os.path.join()函数，这样可以正确处理不同操作系统的路径分隔符
 # 同样拆分路径时，不要直接拆字符串，而要通过os.path.split()函数，这可以把一个路径拆分为两部分，后一部分总是最后级别的目录或文件名
-print os.path.split('C:\\tmp\\testdir')
+print(os.path.split('C:\\tmp\\testdir'))
 # os.path.splitext()可以直接得到文件扩展名
-print os.path.splitext('C:\\tmp\\testdir\\file.txt')
+print(os.path.splitext('C:\\tmp\\testdir\\file.txt'))
 # 这些合并、拆分路径的函数并不要求目录和文件真实存在，只是对字符串进行操作
 # 对文件重命名
 #os.rename('test.txt', 'test.bak')
@@ -95,9 +95,9 @@ print os.path.splitext('C:\\tmp\\testdir\\file.txt')
 # shutil模块提供了copyfile()函数，同时也提供了很多实用函数，可以看做是os模块的补充
 
 # 列出当前目录下的所有目录
-print [x for x in os.listdir('.') if os.path.isdir(x)]
+print([x for x in os.listdir('.') if os.path.isdir(x)])
 # 列出所有的.py文件
-print [x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py']
+print([x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py'])
 
 # 查找当前目录及其子目录下包含指定字符串的文件，并打印出文件路径
 def search(s, path):
@@ -107,7 +107,7 @@ def search(s, path):
         if os.path.isdir(f):
             search(s, fap)
         elif os.path.isfile(f) and s in os.path.split(fap)[1]:
-            print fap
+            print(fap)
 search('test', '.')
 
 # 序列化，把变量从内存中变成可存储或传输的过程称之为序列化
@@ -126,7 +126,7 @@ except ImportError:
 # 把一个对象序列化并写入文件
 d = dict(name='Bob', age=20, score=88)
 # pickle.dumps()方法把任意对象序列化成一个str，然后就可以把这个str写入文件
-print pickle.dumps(d)
+print(pickle.dumps(d))
 # 也可以用pickle.dump()直接把对象序列化后写入一个file-like Object
 with open('dump.txt', 'wb') as f:
     pickle.dump(d, f)
@@ -134,7 +134,7 @@ with open('dump.txt', 'wb') as f:
 # 把反序列化内容读到一个str，然后用pickle.loads()方法反序列化出对象
 # 也可以直接用pickle.load()方法从一个file-like Object中直接反序列化出对象
 with open('dump.txt', 'rb') as f:
-    print pickle.load(f)
+    print(pickle.load(f))
 # 当然这个反序列化的变量和原来的变量完全不相干，只是内容相同而已
 
 # Pickle序列化的数据只能用于Python，并且可能不同版本的Python彼此都不兼容
@@ -154,14 +154,14 @@ import json
 d = dict(name='Jack', age=21, score=89)
 
 # dumps()方法返回一个str，dump()方法可以直接把JSON写入一个file-like Object
-print json.dumps(d)
+print(json.dumps(d))
 with open('json.txt', 'w') as f:
     json.dump(d, f)
 # 将JSON反序列化为Python对象，用loads()或者load()方法
 json_str = '{"age": 21, "score": 89, "name": "Jack"}'
-print json.loads(json_str)
+print(json.loads(json_str))
 with open('json.txt', 'r') as f:
-    print json.load(f)
+    print(json.load(f))
 # 反序列化得到的所有字符串对象默认都是unicode而不是str
 
 # class对象和JSON之间的互相转换
@@ -181,12 +181,12 @@ def student2dict(std):
         'score':std.score
     }
 # 这样Student实例首先被student2dict()函数转换成dict，然后再序列为JSON
-print json.dumps(s, default=student2dict)
+print(json.dumps(s, default=student2dict))
 # 因为通常class的实例都有一个__dict__属性，它就是一个dict，用来存储实例变量。也有少数例外，如定义了__slots__的class
-print json.dumps(s, default=lambda obj: obj.__dict__)
+print(json.dumps(s, default=lambda obj: obj.__dict__))
 # 同样，如果要反序列化，json.loads()方法首先转换出一个dict对象，然后传入object_hook函数负责把dict转换为对应的class实例
 def dict2student(d):
     return Student(d['name'], d['age'], d['score'])
 json_str = '{"age": 25, "score": 98, "name": "Adam"}'
-print json.loads(json_str, object_hook=dict2student)
+print(json.loads(json_str, object_hook=dict2student))
 

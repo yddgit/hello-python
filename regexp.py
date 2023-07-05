@@ -29,37 +29,37 @@ import re
 m = re.match(r'^\d{3}\-\d{3,8}$', '010-12345')
 # 常见的判断方法
 if m:
-    print 'ok'
+    print('ok')
 else:
-    print 'failed'
+    print('failed')
 
 # 切分字符串
 
 # 字符串的split方法，无法识别连续的空格
-print 'a b   c'.split(' ')
+print('a b   c'.split(' '))
 # 正则表达式分割更方便
-print re.split(r'\s+', 'a b   c')
-print re.split(r'[\s\,]+', 'a,b, c  d')
-print re.split(r'[\s\,\;]+', 'a,b;; c  d')
+print(re.split(r'\s+', 'a b   c'))
+print(re.split(r'[\s\,]+', 'a,b, c  d'))
+print(re.split(r'[\s\,\;]+', 'a,b;; c  d'))
 
 # 分组
 
 # 正则表达式除匹配外，还可以提取子串，用()表示的就是要提取的分组（Group）
 m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
 # 如果正则表达式中定义了组，就可以在Match对象上用group()方法提取出子串来
-print m.group(0) # group(0)永远是原始字符串
-print m.group(1) # group(1)表示第1个子串
-print m.group(2) # group(2)表示第2个子串，以此类推
+print(m.group(0)) # group(0)永远是原始字符串
+print(m.group(1)) # group(1)表示第1个子串
+print(m.group(2)) # group(2)表示第2个子串，以此类推
 
 #提取时间字符串中的时分秒
 m = re.match(r'^(0[0-9]|1[0-9]|2[0-3]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])$', '19:05:30')
-print m.groups()
+print(m.groups())
 
 # 贪婪匹配，正则表达式默认是贪婪匹配，也就是匹配尽可能多的字符
 # 如下：匹配出数字后面的0，由于\d+采用贪婪匹配，直接把后面的0全部匹配了，结果0*只能匹配空字符串了
-print re.match(r'^(\d+)(0*)$', '102300').groups()
+print(re.match(r'^(\d+)(0*)$', '102300').groups())
 # 必须让\d+采用非贪婪匹配（也就是尽可能少匹配），才能把后面的0匹配出来，加?即可
-print re.match(r'^(\d+?)(0*)$', '102300').groups()
+print(re.match(r'^(\d+?)(0*)$', '102300').groups())
 
 # 编译
 
@@ -70,13 +70,13 @@ print re.match(r'^(\d+?)(0*)$', '102300').groups()
 import re
 re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')
 # 编译后生成了Regular Expression对象，由于该对象自己包含了正则表达式，所以调用对应方法时不用给出正则字符串
-print re_telephone.match('010-12345').groups()
-print re_telephone.match('010-8086').groups()
+print(re_telephone.match('010-12345').groups())
+print(re_telephone.match('010-8086').groups())
 
 # 验证email
 import re
 re_email = re.compile(r'(\<\w+(\s+\w+)*\>\s+)*(\w+(\.\w+)*)@(\w+(\.\w+)+)')
-print re_email.match('someone@gmail.com').groups()
-print re_email.match('bill.gates@microsoft.com').groups()
-print re_email.match('<Tom Paris> tom@voyager.org').groups()
+print(re_email.match('someone@gmail.com').groups())
+print(re_email.match('bill.gates@microsoft.com').groups())
+print(re_email.match('<Tom Paris> tom@voyager.org').groups())
 

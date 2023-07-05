@@ -12,7 +12,7 @@ import gevent
 
 def f(n):
     for i in range(n):
-        print gevent.getcurrent(), i
+        print(gevent.getcurrent(), i)
         # 要让greenlet交替运行，可以通过gevent.sleep()交出控制权
         gevent.sleep(0)
 
@@ -30,7 +30,7 @@ import gevent
 import urllib2
 
 def f(url):
-    print 'GET: %s' % url
+    print('GET: %s' % url)
     resp = urllib2.urlopen(url)
     data = resp.read()
     print('%d bytes received from %s' % (len(data), url))

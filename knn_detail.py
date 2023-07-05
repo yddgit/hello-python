@@ -78,20 +78,20 @@ def knn():
                 trainingSet.append(dataSet[x])
             else:
                 testSet.append(dataSet[x])
-    print 'trainingSet len: %s' % len(trainingSet)
-    print 'testSet len: %s' % len(testSet)
+    print('trainingSet len: %s' % len(trainingSet))
+    print('testSet len: %s' % len(testSet))
 
     results = []
     for i in range(len(testSet)):
         neighbors = getNeighbors(trainingSet, testSet[i], 3)
         result = getResult(neighbors)
         results.append(result)
-        print ('expected: %s, predicted: %s' % (testSet[i][-1], result))
+        print(('expected: %s, predicted: %s' % (testSet[i][-1], result)))
 
     correct = 0
     for i in range(len(results)):
         if(results[i] == testSet[i][-1]):
             correct += 1
-    print 'percentage of correction: ', correct/float(len(results))
+    print('percentage of correction: ', correct/float(len(results)))
 
 knn()
