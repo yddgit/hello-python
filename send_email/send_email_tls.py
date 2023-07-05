@@ -15,12 +15,12 @@ def _format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令
-from_addr = raw_input('From: ')
-password = raw_input('Password: ')
+from_addr = input('From: ')
+password = input('Password: ')
 # 输入SMTP服务器地址
-smtp_server = raw_input('SMTP Server: ')
+smtp_server = input('SMTP Server: ')
 # 输入收件人地址
-to_addr = raw_input('To: ')
+to_addr = input('To: ')
 
 # 邮件正文
 msg = MIMEText('Hello, send by Python...(Encrypted)', 'plain', 'utf-8')

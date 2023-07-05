@@ -17,12 +17,12 @@ def _format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令
-from_addr = raw_input('From: ')
-password = raw_input('Password: ')
+from_addr = input('From: ')
+password = input('Password: ')
 # 输入SMTP服务器地址
-smtp_server = raw_input('SMTP Server: ')
+smtp_server = input('SMTP Server: ')
 # 输入收件人地址
-to_addr = raw_input('To: ')
+to_addr = input('To: ')
 
 # 如果要加上附件，可以把带附件的邮件看做包含若干部分的邮件：文本和各个附件本身
 # 所以，可以构造一个MIMEMultipart对象代表邮件本身，

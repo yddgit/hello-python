@@ -3,13 +3,17 @@
 
 # taskmanager.py
 
-import random, time, Queue
+import random, time
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 from multiprocessing.managers import BaseManager
 
 # 发送任务的队列
-task_queue = Queue.Queue()
+task_queue = queue.Queue()
 # 接收结果的队列
-result_queue = Queue.Queue()
+result_queue = queue.Queue()
 
 def get_task_queue():
     return task_queue
@@ -25,8 +29,8 @@ def main():
     # 把两个Queue者注册到网络上，callable参数关联了Queue对象
     QueueManager.register('get_task_queue', callable=get_task_queue)
     QueueManager.register('get_result_queue', callable=get_result_queue)
-    # 绑定商品5000，设置验证码'abc'
-    manager = QueueManager(address=('127.0.0.1', 5000), authkey='abc')
+    # 绑定端口5000，设置验证码'abc'
+    manager = QueueManager(address=('127.0.0.1', 5000), authkey=bytes('abc', encoding='utf8'))
     # 启动Queue
     manager.start()
     # 获得通过网络访问的Queue对象

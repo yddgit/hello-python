@@ -94,9 +94,9 @@ print(sys.argv)
 # 如Python标准库一般会提供StringIO和cStringIO两个库，两者接口和功能相同，
 # 但cStringIO是C写的，速度更快，所以经常会有：
 try:
-    import cStringIO as cStringIO
+    import cStringIO as StringIO
 except ImportError: # 导入失败会捕获到ImportError
-    import StringIO
+    from io import StringIO
 # 这样就可以优先导入cStringIO，如果有些平台不提供，还可降级使用StringIO
 # 导入时指定了别名StringIO，因此后续代码引用StringIO即可正常工作
 
@@ -129,7 +129,7 @@ def greeting(name):
     else:
         return _private_2(name)
 
-# 以上，在模块中公开greeting()函数，把内部逻辑用private函数隐藏起来，调用greeing()函数不用关心内部函数细节
+# 以上，在模块中公开greeting()函数，把内部逻辑用private函数隐藏起来，调用greeting()函数不用关心内部函数细节
 # 这是一种非常有用的代码封装和抽象的方法：外部不需要引用的函数全部定义成private，只有外部需要引用的函数才定义为public
 
 # 安装第三方模块
@@ -185,10 +185,10 @@ sys.path.append('F:\\temp')
 # 而在2.x中以'xxx'表示的str在3.x中就必须写成b'xxx'，以此表示二进制字符串
 # 为了适应3.x新的字符串表示方法，在2.x中可以通过unicode_literals来使用3.x的新语法
 #from __future__ import unicode_literals # 这句必须写在文件最开始
-print('\'xxx\' is unicode?', isinstance('xxx', unicode))
-print('u\'xxx\' is unicode?', isinstance(u'xxx', unicode))
-print('\'xxx\' is str?', isinstance('xxx', str))
-print('b\'xxx\' is unicode?', isinstance(b'xxx', str))
+print('\'xxx\' is unicode?', isinstance('xxx', str))
+print('u\'xxx\' is unicode?', isinstance(u'xxx', str))
+print('\'xxx\' is str?', isinstance('xxx', bytes))
+print('b\'xxx\' is unicode?', isinstance(b'xxx', bytes))
 
 # 类似的还有除法运算，在Python2.x中，如果是整数相除，结果仍是整数，余数会被扔掉，叫做“地板除”
 print(10 / 3)

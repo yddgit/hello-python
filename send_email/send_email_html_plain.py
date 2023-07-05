@@ -16,12 +16,12 @@ def _format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令
-from_addr = raw_input('From: ')
-password = raw_input('Password: ')
+from_addr = input('From: ')
+password = input('Password: ')
 # 输入SMTP服务器地址
-smtp_server = raw_input('SMTP Server: ')
+smtp_server = input('SMTP Server: ')
 # 输入收件人地址
-to_addr = raw_input('To: ')
+to_addr = input('To: ')
 
 # 如果要发送HTML邮件，但收件人无法查看HTML邮件时，可以在发送HTML的同时再附加一个纯文本。
 # 如果收件人无法查看HTML格式的邮件，就可以自动降级查看纯文本邮件。

@@ -15,9 +15,9 @@ from email.header import decode_header
 from email.utils import parseaddr
 
 # 输入邮件地址、口令和POP3服务器地址
-email = raw_input('Email: ')
-password = raw_input('Password: ')
-pop3_server = raw_input('POP3 server: ')
+email = input('Email: ')
+password = input('Password: ')
+pop3_server = input('POP3 server: ')
 
 # 连接到POP3服务器，有些邮箱必须使用安全连接，如QQ邮箱
 #server = poplib.POP3(pop3_server)

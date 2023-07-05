@@ -17,12 +17,12 @@ def _format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令
-from_addr = raw_input('From: ')
-password = raw_input('Password: ')
+from_addr = input('From: ')
+password = input('Password: ')
 # 输入SMTP服务器地址
-smtp_server = raw_input('SMTP Server: ')
+smtp_server = input('SMTP Server: ')
 # 输入收件人地址
-to_addr = raw_input('To: ')
+to_addr = input('To: ')
 
 # 如果要把一个图片嵌入到邮件正文中，可以直接在HTML邮件中链接图片地址，但大部分邮件服务商都会自动屏蔽带有外链的图片
 # 要把图片嵌入到邮件正文中，只能先把图片做为附件添加进去，然后在HTML中通过src="cid:0"来引用。

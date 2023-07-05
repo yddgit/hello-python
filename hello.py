@@ -5,8 +5,8 @@
 
 print("Hello World")
 
-# 单行注释，raw_input接受终端用户输入
-name = raw_input("Please enter your name: ")
+# 单行注释，input接受终端用户输入
+name = input("Please enter your name: ")
 
 '''
 这是一个多行注释的示例
@@ -49,12 +49,12 @@ print('I\'m learning\nPython.')
 print('\\\n\\')
 print('\\\t\\')
 print(r'\\\t\\') # Python还允许用r''表示''内部的字符串默认不转义
-print('''line1)
+print('''line1
 line2
-line3''' # Python允许用'''...'''的格式表示多行内容
-print(r'''line1\n)
+line3''') # Python允许用'''...'''的格式表示多行内容
+print(r'''line1\n
 line2\n
-line3\n''' # 多行字符串'''...'''还可以在前面加上r使用
+line3\n''') # 多行字符串'''...'''还可以在前面加上r使用
 
 # 布尔值（True/False）
 print("\n=========Boolean:")
@@ -105,4 +105,4 @@ print(PI)
 print("\n=========Divide")
 print("10 / 3 =", 10 / 3)
 print("10.0 / 3 =", 10.0 / 3)
-print "10 % 3 = ", 10 % 3
+print("10 % 3 = ", 10 % 3)

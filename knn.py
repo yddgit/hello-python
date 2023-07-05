@@ -21,4 +21,4 @@ knn.fit(iris.data, iris.target)
 # predict
 predictedLabel = knn.predict([[0.1, 0.2, 0.3, 0.4]])
 # show predicted result
-print predictedLabel
+print(predictedLabel)

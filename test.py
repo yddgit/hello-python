@@ -11,7 +11,7 @@ try:
     print('try...')
     r = 10 / 0
     print('result:', r)
-except ZeroDivisionError, e:
+except ZeroDivisionError as e:
     print('except:', e)
 finally:
     print('finally...')
@@ -23,9 +23,9 @@ try:
     print('try...')
     r = 10 / int('a')
     print('result:', r)
-except ValueError, e:
+except ValueError as e:
     print('ValueError:', e)
-except ZeroDivisionError, e:
+except ZeroDivisionError as e:
     print('ZeroDivisionError:', e)
 finally:
     print('finally...')
@@ -36,9 +36,9 @@ try:
     print('try...')
     r = 10 / 2
     print('result:', r)
-except ValueError, e:
+except ValueError as e:
     print('ValueError:', e)
-except ZeroDivisionError, e:
+except ZeroDivisionError as e:
     print('ZeroDivisionError:', e)
 else:
     print('no error!')
@@ -49,11 +49,11 @@ print('END')
 # Python所有的错误类型都继承自BaseException，所以在except时，不但捕获该类型的错误，还会把其子类也“一网打尽”
 try:
     print('foo')
-except StandardError, e:
-    print('StandardError')
-except ValueError, e:
+except Exception as e:
+    print('Exception')
+except ValueError as e:
     print('ValueError')
-# 上面的第二个except永远也得不到执行，因为ValueError是StandardError的子类
+# 上面的第二个except永远也得不到执行，因为ValueError是Exception的子类
 
 # 常见的错误类型和继承关系参考官方文档：
 # https://docs.python.org/2/library/exceptions.html#exception-hierarchy
@@ -66,7 +66,7 @@ def foo(s):
 def main():
     try:
         foo('0')
-    except StandardError, e:
+    except Exception as e:
         print('Error!')
     finally:
         print('finally...')
@@ -90,7 +90,7 @@ logging.basicConfig(level=logging.INFO)
 def main():
     try:
         bar('0')
-    except StandardError, e:
+    except Exception as e:
         logging.exception(e)
 main()
 print('END')
@@ -100,7 +100,7 @@ print('END')
 # 抛出错误
 
 # 根据需要定义错误class，选择好继承关系，然后用raise语句抛出一个错误的实例
-class FooError(StandardError):
+class FooError(Exception):
     pass
 def foo(s):
     n = int(s)
@@ -118,7 +118,7 @@ def foo(s):
 def bar(s):
     try:
         return foo(s) * 2
-    except StandardError, e:
+    except Exception as e:
         print('Error!')
         raise
 def main():

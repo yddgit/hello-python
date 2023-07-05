@@ -3,7 +3,11 @@
 
 # taskworker.py
 
-import time, sys, Queue
+import time, sys
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 from multiprocessing.managers import BaseManager
 
 # 创建类似的QueueManager
@@ -18,7 +22,7 @@ QueueManager.register('get_result_queue')
 server_addr = '127.0.0.1'
 print('Connect to server %s...' % server_addr)
 # 端口和验证码保持与taskmanager.py设置的完全一致
-m = QueueManager(address=(server_addr, 5000), authkey='abc')
+m = QueueManager(address=(server_addr, 5000), authkey=bytes('abc', encoding='utf8'))
 # 从网络连接
 m.connect()
 # 获取Queue对象
@@ -32,7 +36,7 @@ for i in range(10):
         r = '%d * %d = %d' % (n, n, n*n)
         time.sleep(1)
         result.put(r)
-    except Queue.Empty:
+    except queue.Empty:
         print('task queue is empty.')
 # 处理结束
 print('worker exit')

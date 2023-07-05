@@ -15,12 +15,12 @@ def _format_addr(s):
         addr.encode('utf-8') if isinstance(addr, unicode) else addr))
 
 # 输入Email地址和口令
-from_addr = raw_input('From: ')
-password = raw_input('Password: ')
+from_addr = input('From: ')
+password = input('Password: ')
 # 输入SMTP服务器地址
-smtp_server = raw_input('SMTP Server: ')
+smtp_server = input('SMTP Server: ')
 # 输入收件人地址
-to_addr = raw_input('To: ')
+to_addr = input('To: ')
 
 # 构造MIMEText对象时，第一个参数是邮件正文，第二个参数是MIME的subtype，传plain最终MIME就是text/plain，最后用utf-8编码保证多语言兼容性
 #msg = MIMEText('Hello, send by Python...', 'plain', 'utf-8')
