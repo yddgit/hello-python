@@ -4,7 +4,7 @@
 '''
 安装类库
   pip install numpy
-  pip install scipy
+  pip install scikit-learn scipy matplotlib
   pip install sklearn
 使用KNN分类算法在iris数据集上进行学习
 '''

@@ -109,18 +109,18 @@ print(c)
 
 # Python内置base64可以直接进行base64的编解码
 import base64
-print(base64.b64encode('binary\x00string'))
+print(base64.b64encode(b'binary\x00string'))
 print(base64.b64decode('YmluYXJ5AHN0cmluZw=='))
 # 由于标准的Base64编码后可能出现字符+和/，URL中不能直接作为参数，所以又有一种urlsafe的base64编码，就是把+和/变成-和_
-print(base64.b64encode('i\xb7\x1d\xfb\xef\xff'))
-print(base64.urlsafe_b64encode('i\xb7\x1d\xfb\xef\xff'))
-print(base64.urlsafe_b64decode('abcd--__'))
+print(base64.b64encode(b'i\xb7\x1d\xfb\xef\xff'))
+print(base64.urlsafe_b64encode(b'i\xb7\x1d\xfb\xef\xff'))
+print(base64.urlsafe_b64decode(b'abcd--__'))
 # 还可以自己定义64个字符的排列顺序，这样就可以自定义Base64编码，不过通常没有必要
 
 # Base64不能用于加密，适用于小段内容的编码，如数字证书签名、Cookie的内容等
 # 由于=字符也可能出现的Base64编码中，但=用在URL、Cookie里会造成歧义，所以，很多Base64编码会把=去掉
 # 去掉=后，因为Base64是把3个字节变成4个字节，所以Base64编码的长度永远是4的倍数，因此加上=把Base64字符串的长度变为4的倍数，就可以正常解码了
-print(base64.b64decode('YWJjZA=='))
+print(base64.b64decode(b'YWJjZA=='))
 #print(base64.b64decode('YWJjZA'))
 def safe_b64decode(base64str):
     append_num = 4 - len(base64str) % 4
@@ -140,7 +140,7 @@ import struct
 print(struct.pack('>I', 10240099))
 # pack的第一个参数是处理指令，'>I'表示：>表示字节顺序是big-endian，也就是网络序，I表示4字节无符号整数。后面的参数个数要和处理指令一致
 # unpack函数把str变成相应的数据类型
-print(struct.unpack('>IH', '\xf0\xf0\xf0\xf0\x80\x80'))
+print(struct.unpack('>IH', b'\xf0\xf0\xf0\xf0\x80\x80'))
 # 根据>IH的说明，后面的str依次变为I（4字节无符号整数）和H（2字节无符号整数）
 
 # Python虽然不适合编写操作字节流的代码，但在对性能要求不高的地方，用struct就方便多了
@@ -148,7 +148,7 @@ print(struct.unpack('>IH', '\xf0\xf0\xf0\xf0\x80\x80'))
 # https://docs.python.org/2/library/struct.html#format-characters
 
 # Windows的位图文件（.bmp）是一种非常简单的文件格式，读入前30个字节来分析：
-with open('test.bmp', 'r') as f:
+with open('test.bmp', 'rb') as f:
     s = f.read(30)
     print(struct.unpack('<ccIIIIIIHH', s))
 
@@ -173,18 +173,18 @@ import hashlib
 # MD5是最常见的摘要算法，速度很快，生成结果是固定的128bit字节，通过用32位的16进制字符串表示
 # 计算一个字符串的MD5值
 md5 = hashlib.md5()
-md5.update('how to use md5 in python hashlib?')
+md5.update('how to use md5 in python hashlib?'.encode('utf8'))
 print(md5.hexdigest())
 # 如果数据量大，可以分块多次调用update()，计算结果一样
 md5 = hashlib.md5()
-md5.update('how to use md5 in ')
-md5.update('python hashlib?')
+md5.update('how to use md5 in '.encode('utf8'))
+md5.update('python hashlib?'.encode('utf8'))
 print(md5.hexdigest())
 
 # SHA1调用与MD5类似，结果是160bit字节，通常用一个40位的16进制字符串表示
 sha1 = hashlib.sha1()
-sha1.update('how to use md5 in ')
-sha1.update('python hashlib?')
+sha1.update('how to use md5 in '.encode('utf8'))
+sha1.update('python hashlib?'.encode('utf8'))
 print(sha1.hexdigest())
 # SHA256和SHA512比SHA1更安全，不过越安全的算法越慢，而且摘要长度更长
 
@@ -193,7 +193,7 @@ print(sha1.hexdigest())
 # 用户口令的加密保存，即使运维人员能访问数据库，也无法获知用户的明文口令
 def calc_md5(password):
     md5 = hashlib.md5()
-    md5.update(password)
+    md5.update(password.encode('utf8'))
     return md5.hexdigest()
 
 # 验证用户登录，根据输入的口令返回True或False
@@ -204,7 +204,7 @@ db = {
 }
 def login(user, password):
     md5 = hashlib.md5()
-    md5.update(password)
+    md5.update(password.encode('utf8'))
     input_pass = md5.hexdigest()
     user_pass = db[user]
     if input_pass == user_pass:
@@ -260,18 +260,18 @@ for key, group in itertools.groupby('AAABBBCCAAA'):
 for key, group in itertools.groupby('AaaBBbcCAAa', lambda c: c.upper()):
     print(key, list(group))
 
-# imap()和map()的区别在于，imap()可以作用于无穷序列，并且两个序列长度不一致，以短的为准
-for x in itertools.imap(lambda x, y: x * y, [10, 20, 30], itertools.count(1)):
+# map()可以作用于无穷序列，并且两个序列长度不一致，以短的为准
+for x in map(lambda x, y: x * y, [10, 20, 30], itertools.count(1)):
     print(x)
-# 注意：imap()返回一个迭代对象，而map()返回list。当调用map()时，已经计算完毕
+# 注意：map()返回一个迭代对象
 print(map(lambda x: x*x, [1, 2, 3]))
-# 而当调用imap()时，并没有进行任何计算
-r = itertools.imap(lambda x: x*x, [1, 2, 3])
+# 当调用map()时，并没有进行任何计算
+r = map(lambda x: x*x, [1, 2, 3])
 print(r)
 # 必须用for循环对r进行迭代，才会在每次循环过程中计算出下一个元素
 for x in r:
     print(x)
-# 这就说明imap()实现了“惰性计算”，类似imap()这样能够实现惰性计算的函数就可以处理无限序列
+# 这就说明map()实现了“惰性计算”，类似map()这样能够实现惰性计算的函数就可以处理无限序列
 
 # ifilter()就是filter()的惰性实现
 
@@ -306,7 +306,7 @@ xml = r'''<?xml version="1.0"?>
 handler = DefaultSaxHandler()
 parser = ParserCreate()
 # 设置returns_unicode为True时返回的所有element名称和char_data都是unicode，方便国际化处理
-parser.returns_unicode = True
+#parser.returns_unicode = True
 parser.StartElementHandler = handler.start_element
 parser.EndElementHandler = handler.end_element
 parser.CharacterDataHandler = handler.char_data
@@ -328,8 +328,8 @@ print(''.join(L))
 # HTML本质上是XML的子集，但是HTML的语法没有XML那么严格，所以不能用标准的DOM或SAX来解析
 # Python提供了HTMLParser来方便地解析HTML
 
-from HTMLParser import HTMLParser
-from htmlentitydefs import name2codepoint
+from html.parser import HTMLParser
+from html.entities import name2codepoint
 
 class MyHTMLParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
@@ -367,13 +367,13 @@ class PyHTMLParser(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrdict = dict(attrs)
-        if tag == 'a' and attrdict.has_key('href') and self.__re_title.match(attrdict['href']):
+        if tag == 'a' and 'href' in attrdict and self.__re_title.match(attrdict['href']):
             self.__event_info.append('TITLE: ')
             self.__found_title = True
         if tag == 'time' and self.__found_title:
             self.__event_info.append('  TIME: ')
             self.__found_title = False
-        if tag == 'span' and attrdict.has_key('class') and attrdict['class'] == 'event-location':
+        if tag == 'span' and 'class' in attrdict and attrdict['class'] == 'event-location':
             self.__event_info.append('  LOCATION: ')
 
     def handle_endtag(self, tag):
@@ -383,7 +383,7 @@ class PyHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         if len(self.__event_info) > 0:
-            self.__event_info.append(data.decode('utf-8'))
+            self.__event_info.append(data)
 
 with open('python-events.html', 'r') as f:
     content = f.read()

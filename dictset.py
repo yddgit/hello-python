@@ -50,7 +50,7 @@ print(s1 & s2)
 print(s1 | s2)
 # set的元素必须是不可变对象
 
-# string是不可变对账，list是可变对象，对list操作，其内部的内容是会变化的
+# string是不可变对象，list是可变对象，对list操作，其内部的内容是会变化的
 a = ['c', 'b', 'a']
 a.sort()
 print(a)

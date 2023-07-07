@@ -191,10 +191,10 @@ print(type('abc') == type('123'))
 print(type('abc') == type(123))
 # Python把每种type类型都定义好了常量，放在types模块里，使用之前，需要先导入
 import types
-print(type('abc') == types.StringType)
-print(type(u'abc') == types.UnicodeType)
-print(type([]) == types.ListType)
-print(type(int) == type(str) == types.TypeType)
+print(type('abc') == str)
+print(type(u'abc') == str)
+print(type([]) == list)
+print(type(int) == type(str) == type)
 
 # 使用isinstance()
 # 要判断class的类型，可以使用isinstance()函数，如果继承关系是：object -> Animal -> Dog
@@ -209,14 +209,14 @@ print(isinstance(a, Dog))
 
 # isinstance()也可以判断基本类型
 print(isinstance('a', str))
-print(isinstance(u'a', unicode))
-print(isinstance('a', unicode))
+print(isinstance(u'a', str))
+print(isinstance('a', str))
 
 # 还可以判断一个变量是否是某些类型中的一种
-print(isinstance('a', (str, unicode)))
-print(isinstance(u'a', (str, unicode)))
+print(isinstance('a', (str, str)))
+print(isinstance(u'a', (str, str)))
 # 由于str和unicode都是从basestring继承下来的，所以，以上代码可以简化为
-print(isinstance(u'a', basestring))
+print(isinstance(u'a', str))
 
 # 使用dir()
 

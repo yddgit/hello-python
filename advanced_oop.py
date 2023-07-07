@@ -18,7 +18,7 @@ print(s.name)
 def set_age(self, age):
     self.age = age
 from types import MethodType
-s.set_age = MethodType(set_age, s, Student)
+s.set_age = MethodType(set_age, s)
 s.set_age(25) # 调用实例方法
 print(s.age) # 测试结果
 
@@ -29,7 +29,7 @@ s2 = Student()
 # 为了给所有实例都绑定方法，可以给class绑定方法
 def set_score(self, score):
     self.score = score
-Student.set_score = MethodType(set_score, None, Student)
+Student.set_score = MethodType(set_score, Student)
 # 给class绑定方法后，所有实例均可调用
 s.set_score(100)
 s2.set_score(99)
@@ -180,9 +180,14 @@ class Dog(Mammal, RunnableMixin, CarnivorousMixin):
 # 如TCPServer和UDPServer这两类网络服务，要同时服务多个用户就必须使用多进程或多线程模型，这两种模块由ForkingMixin和ThreadingMixin提供。
 # 通过组合，我们就可以创造出合适的服务来
 
-from SocketServer import TCPServer,ForkingMixIn,UDPServer,ThreadingMixIn
+from socketserver import TCPServer,UDPServer,ThreadingMixIn
+try:
+    from socketserver import ForkingMixIn
+except ImportError:
+    print('Do not support os.fork()')
 # 比如，编写一个多进程模式的TCP服务，定义如下
-class MyTCPServer(TCPServer, ForkingMixIn):
+#class MyTCPServer(TCPServer, ForkingMixIn):
+class MyTCPServer(TCPServer):
     pass
 # 编写一个多线程模式的UDP服务，定义如下
 class MyUDPServer(UDPServer, ThreadingMixIn):
@@ -223,11 +228,13 @@ class Fib(object):
         self.a, self.b = 0, 1 # 初始化两个计数器a，b
     def __iter__(self):
         return self # 实例本身就是迭代对象，故返回自己
-    def next(self):
+    def __next__(self):
         self.a, self.b = self.b, self.a + self.b # 计算下一个值
         if self.a > 10: # 退出循环的条件
             raise StopIteration
         return self.a
+    def next(self):
+        return self.__next__()
 for n in Fib():
     print(n)
 
@@ -254,7 +261,7 @@ class Fib(object):
                 a, b = b, a + b
             return a
         if isinstance(n, slice):
-            start = n.start
+            start = n.start or 0
             stop = n.stop
             a, b = 1, 1
             L = []
@@ -388,7 +395,7 @@ class ListMetaclass(type): # metaclass类名总是以Metaclass结尾，metaclass
     def __new__(cls, name, bases, attrs):
         attrs['add'] = lambda self, value: self.append(value)
         return type.__new__(cls, name, bases, attrs)
-class MyList(list):
+class MyList(list, metaclass=ListMetaclass):
     __metaclass__ = ListMetaclass # 指示使用ListMetaclass来定制类
 # 以上Python解释器在创建MyList时，要通过ListMetaclass.__new__()来创建，在此修改类的定义，如，增加新方法，然后返回修改后的定义
 # __new__()方法接收到的参数依次是：
@@ -424,17 +431,17 @@ class ModelMetaclass(type):
         if name == 'Model':
             return type.__new__(cls, name, bases, attrs)
         mappings = dict()
-        for k, v in attrs.iteritems():
+        for k, v in attrs.items():
             if isinstance(v, Field):
                 print('Found mapping: %s --> %s' % (k, v))
                 mappings[k] = v
-        for k in mappings.iterkeys():
+        for k in mappings.keys():
             attrs.pop(k)
         attrs['__table__'] = name # 假设表名和类名一样
         attrs['__mappings__'] = mappings # 保存属性和列的映射关系
         return type.__new__(cls, name, bases, attrs)
 # Model基类
-class Model(dict):
+class Model(dict, metaclass=ModelMetaclass):
     __metaclass__ = ModelMetaclass
     def __init__(self, **kw):
         super(Model, self).__init__(**kw)
@@ -449,7 +456,7 @@ class Model(dict):
         fields = []
         params = []
         args = []
-        for k, v in self.__mappings__.iteritems():
+        for k, v in self.__mappings__.items():
             fields.append(v.name)
             params.append('?')
             args.append(getattr(self, k, None))

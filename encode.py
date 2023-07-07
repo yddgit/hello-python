@@ -15,8 +15,8 @@ print(u'中'u'\u4e2d') # \u后面是十六进制的Unicode码
 # 把UTF-8编码表示的字符串'xxx'转换为Unicode字符串u'xxx'用decode('utf-8')方法
 print(u'ABC'.encode('utf-8')) # 'ABC'
 print(u'中文'.encode('utf-8')) # '\xe4\xb8\xad\xe6\x96\x87'
-print('abc'.decode('utf-8')) # u'abc'
-print('\xe4\xb8\xad\xe6\x96\x87'.decode('utf-8')) # u'\u4e2d\u6587'
+print('abc') # u'abc'
+print(b'\xe4\xb8\xad\xe6\x96\x87') # u'\u4e2d\u6587'
 
 # 英文字符转换后表示的UTF-8的值和Unicode值相等（但占用的存储空间不同）
 # 而中文字符转换后1个Unicode字符将变为3个UTF-8字符，你看到的\xe4就是其中一个

@@ -28,7 +28,9 @@ print(N[:10])   #前10个
 print(N[-10:])  #后10个
 print(N[10:20]) #前11-20个数
 print(N[:10:2]) #前10个数，每两个取一个
+print([x for x in N[:10:2]])
 print(N[::5])   #所有数每5个取一个
+print([x for x in N[::5]])
 print(N[:])     #原样复制一个list
 
 # tuple也可以用切片操作，操作结果仍是tuple
@@ -46,14 +48,14 @@ print('ABCDEFG'[::2])
 d = {'a':1, 'b':2, 'c':3}
 for key in d:
     print(key)
-for value in d.itervalues():
+for value in d.values():
     print(value)
-for k,v in d.iteritems():
+for k,v in d.items():
     print(k, '=', v)
 for ch in 'ABC':
     print(ch)
 # 通过collections模块的Iterable类型判断一个对象是否是可迭代对象
-from collections import Iterable
+from collections.abc import Iterable
 print(isinstance('abc', Iterable))   # str是否可迭代
 print(isinstance([1,2,3], Iterable)) # list是否可迭代
 print(isinstance(123, Iterable))     # 整数是否可迭代
@@ -78,10 +80,10 @@ print([m + n for m in 'ABC' for n in 'XYZ'])
 import os # 导入os模块
 print([d for d in os.listdir('.')]) # os.listdir可以列出文件和目录
 # for循环同时使用两个甚至多个变量
-for k, v in {'x':'A', 'y':'B', 'z':'C'}.iteritems():
+for k, v in {'x':'A', 'y':'B', 'z':'C'}.items():
     print(k, '=', v)
 # 因此列表生成式也可以使用两个变量来生成list
-print([k+'='+v for k, v in {'x':'A', 'y':'B', 'z':'C'}.iteritems()])
+print([k+'='+v for k, v in {'x':'A', 'y':'B', 'z':'C'}.items()])
 # 把list中所有的字符串变成小写
 L = ['Hello', 'World', 'IBM', 'Apple']
 print([s.lower() for s in L])
@@ -98,16 +100,16 @@ print([x * x for x in range(10)])
 g = (x * x for x in range(10))
 print(g)
 # 使用generator的next()方法获取元素值
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
-print(g.next())
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
 # 没有更多元素时，抛出StopIteration的错误
 #print(g.next())
 
@@ -145,9 +147,9 @@ def odd():
     print('step 3')
     yield 5
 o = odd()
-print(o.next())
-print(o.next())
-print(o.next())
+print(next(o))
+print(next(o))
+print(next(o))
 #print(o.next())
 # 可以看到，odd是一个generator，在执行过程中，遇到yield就中断，下次又继续执行
 # 执行3次yield后，已经没有yield可以执行了，所以，第4次调用next()就报错

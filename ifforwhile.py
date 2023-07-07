@@ -52,10 +52,15 @@ print(sum)
 
 # 根据输入的年份进行判断
 birth = input('birth: ')
-if(birth < 2000):
-    print(u'00前')
-else:
-    print(u'00后')
+
+# TypeError: '<' not supported between instances of 'str' and 'int'
+try:
+    if(birth < 2000):
+        print(u'00前')
+    else:
+        print(u'00后')
+except TypeError as e:
+    print(e)
 # 以上代码输入1989却输出：00后，这显然是不对的
 # input读取的内容永远以字符串形式返回，必须先用int()把字符串转换为整型
 birth = int(input('birth: '))

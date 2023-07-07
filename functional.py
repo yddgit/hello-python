@@ -35,6 +35,8 @@ def f(x):
     return x * x
 print(map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
 
+from functools import reduce, cmp_to_key
+
 # reduce()把一个函数作用在一个序列[x1, x2, x3...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算
 # 其效果就是：reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
 def add(x, y):
@@ -105,7 +107,7 @@ def reversed_cmp(x, y):
     if x < y:
         return 1
     return 0
-print(sorted([36,5,12,9,21], reversed_cmp))
+print(sorted([36,5,12,9,21], key=cmp_to_key(reversed_cmp)))
 # 字符串排序，按照ASCII的大小比较，由于'Z' < 'a'，所以Z会排在a的前面
 print(sorted(['bob','about','Zoo','Credit']))
 # 忽略大小写的排序
@@ -117,7 +119,7 @@ def cmp_ignore_case(s1, s2):
     if u1 > u2:
         return 1
     return 0
-print(sorted(['bob','about','Zoo','Credit'], cmp_ignore_case))
+print(sorted(['bob','about','Zoo','Credit'], key=cmp_to_key(cmp_ignore_case)))
 
 # 函数做为返回值
 

@@ -14,17 +14,12 @@ print(abs(12.34))
 # 如果参数数量是对的，但参数类型不对，则会提示参数类型错误
 #abs('a')
 
-# 比较函数cmp(x, y)，如果x<y返回-1，如果x==y返回0，如果x>y，返回1
-print(cmp(1, 2))
-print(cmp(2, 1))
-print(cmp(3, 3))
-
 # 数据类型转换函数，如int()将其他数据类型转换为整数
 print(int('123'))
 print(int(12.34))
 print(float('12.34'))
 print(str(1.23))
-print(unicode(100))
+print(str(100))
 print(bool(1))
 print(bool(''))
 
