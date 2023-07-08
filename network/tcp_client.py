@@ -13,13 +13,13 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('www.baidu.com', 80))
 # TCP连接创建的是双向通道，双方谁先发谁后发，怎么协调要根据具体协议来决定
 # HTTP协议规定客户端必须先发请求给服务器，服务器收到后才发数据给客户端
-s.send('GET / HTTP/1.1\r\nHost: www.baidu.com\r\nConnection: close\r\n\r\n')
+s.send(b'GET / HTTP/1.1\r\nHost: www.baidu.com\r\nConnection: close\r\n\r\n')
 # 发送的文件必须符合HTTP标准，如果格式没问题，就可以接收服务器返回的数据了
 buffer = []
 while True:
     d = s.recv(1024) # 每次最多接收1K字节
     if d:
-        buffer.append(d)
+        buffer.append(str(d, 'utf-8'))
     else:
         break
 data = ''.join(buffer)
@@ -39,9 +39,9 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('127.0.0.1', 9999))
 # 接收欢迎消息
 print(s.recv(1024))
-for data in ['Michael', 'Tracy', 'Sarah']:
+for data in [b'Michael', b'Tracy', b'Sarah']:
     s.send(data) # 发送数据
     print(s.recv(1024))
-s.send('exit')
+s.send(b'exit')
 s.close()
 

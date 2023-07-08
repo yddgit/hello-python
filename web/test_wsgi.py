@@ -17,8 +17,8 @@ def application(environ, start_response):
     CONTENT_TYPE = 'text/html; charset=utf-8'
     start_response('200 OK', [('Content-Type', CONTENT_TYPE)])
     pathInfo = environ['PATH_INFO'][1:]
-    htmlText = u'<html><body><h1>Hello %s</h1></body></html>' % (pathInfo.decode('utf-8') or u'World')
-    return htmlText.encode('utf-8')
+    htmlText = u'<html><body><h1>Hello %s</h1></body></html>' % (pathInfo or u'World')
+    return [htmlText.encode('utf-8')]
 # 以上，application函数就是符合WSGI标准的一个HTTP处理函数，接收两个参数：
 # 1.environ: 一个包含所有HTTP请求信息的dict对象
 # 2.start_response: 一个发送HTTP响应的函数

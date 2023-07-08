@@ -22,13 +22,13 @@ print('Waiting for connection...')
 # 如果客户端发送了exit字符串，就直接关闭连接
 def tcplink(sock, addr):
     print('Accept new connection from %s:%s...' % addr)
-    sock.send('Welcome!')
+    sock.send(b'Welcome!')
     while True:
         data = sock.recv(1024)
         time.sleep(1)
-        if data == 'exit' or not data:
+        if not data or str(data, 'utf-8') == 'exit':
             break
-        sock.send('Hello, %s!' % data)
+        sock.send(b'Hello, %s!' % data)
     sock.close()
     print('Connection from %s:%s closed.' % addr)
 # 通过循环来接受客户端连接，accept()会等待并返回一个客户端连接

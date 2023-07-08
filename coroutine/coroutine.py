@@ -58,7 +58,7 @@ def consumer():
         r = '200 OK'
 
 def producer(c):
-    c.next()
+    next(c)
     n = 0
     while n < 5:
         n = n + 1
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     producer(c)
 
 # 注意到consumer函数是一个generator(生成器)，把一个consumer传入producer后：
-# 1.首先调用c.next()启动生成器
+# 1.首先调用next(c)启动生成器
 # 2.然后一旦生产了东西，通过c.send(n)切换到consumer执行
 # 3.consumer通过yield拿到消息，处理，又通过yield把结果传回
 # 4.producer拿到consumer处理的结果，继续生产下一条消息

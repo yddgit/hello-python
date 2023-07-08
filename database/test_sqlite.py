@@ -19,7 +19,7 @@ try:
     cursor.execute('insert into user (id, name) values (\'1\', \'Michael\')')
     # 通过rowcount获得插入的行数
     print(cursor.rowcount)
-except sqlite3.Error, e:
+except sqlite3.Error(e):
     print(e)
 finally:
     # 关闭Cursor
@@ -38,7 +38,7 @@ try:
     # 获得查询结果
     values = cursor.fetchall()
     print(values)
-except sqlite3.Error, e:
+except sqlite3.Error(e):
     print(e)
 finally:
     cursor.close()

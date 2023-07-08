@@ -17,5 +17,5 @@ while True:
     # recvfrom()方法返回数据和客户端的地址与端口
     data, addr = s.recvfrom(1024)
     print('Received from %s:%s.' % addr)
-    s.sendto('Hello, %s!' % data, addr)
+    s.sendto(b'Hello, %s!' % data, addr)
 

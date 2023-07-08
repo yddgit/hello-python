@@ -27,13 +27,13 @@ g3.join()
 
 from gevent import monkey; monkey.patch_all()
 import gevent
-import urllib2
+from urllib.request import urlopen
 
 def f(url):
     print('GET: %s' % url)
-    resp = urllib2.urlopen(url)
-    data = resp.read()
-    print('%d bytes received from %s' % (len(data), url))
+    with urlopen(url) as resp:
+        data = resp.read()
+        print('%d bytes received from %s' % (len(data), url))
 
 gevent.joinall([
     gevent.spawn(f, 'https://www.python.org'),
