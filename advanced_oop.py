@@ -359,6 +359,36 @@ print(callable('string'))
 # 更多可定制方法参考Python的官方文档
 # http://docs.python.org/2/reference/datamodel.html#special-method-names
 
+from enum import Enum, unique
+
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+# value属性是自动赋值的，默认从1开始
+for name, member in Month.__members__.items():
+    print(name, '=>', member, ',', member.value)
+
+@unique # unique可以帮助我们检查保证没有重复值
+class Weekday(Enum):
+    Sun = 0 # Sun的value被设定为0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+
+print(Weekday.Mon)
+print(Weekday['Tue'])
+print(Weekday.Tue.value)
+print(Weekday(1))
+day1 = Weekday.Mon
+print(day1)
+print(day1 == Weekday.Mon)
+print(day1 == Weekday.Tue)
+print(day1 == Weekday(1))
+#print(Weekday(7))
+for name, member in Weekday.__members__.items():
+    print(name, '=>', member)
+
 # 使用元类
 
 # 动态语言和静态语言最大的不同，就是函数和类的定义，不是编译时定义的，而是运行时动态创建的

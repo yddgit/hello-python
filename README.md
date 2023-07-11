@@ -22,3 +22,16 @@ Learn to use Python
 
 - 只有一个元素的tuple：`(1,)`
 - 函数的命名关键字参数(如果没有可变参数就必须加一个`*`作为特殊分隔符)：`def person(name, age, *, city, job)`
+- 列表生成式
+
+  ```python
+  >>> [x * x for x in range(1, 11) if x % 2 == 0]
+  [4, 16, 36, 64, 100]
+  >>> L = ['Hello', 'World', 'IBM', 'Apple']
+  >>> [s.lower() for s in L]
+  ['hello', 'world', 'ibm', 'apple']
+  >>> [x if x % 2 == 0 else -x for x in range(1, 11)]
+  [-1, 2, -3, 4, -5, 6, -7, 8, -9, 10]
+  ```
+
+- 使用`iter()`函数把`list`、`dict`、`str`等`Iterable`变成`Iterator`：`isinstance(iter([]), Iterator)`

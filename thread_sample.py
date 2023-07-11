@@ -40,7 +40,7 @@
 #    p.join()
 #    print('Process end.')
 
-# 以上代码执行时因为2.7.x的一个bug，需要带-O参数：python -O thread.py（感觉是一个assert语句有问题）
+# 以上代码执行时因为2.7.x的一个bug，需要带-O参数：python -O thread_sample.py（感觉是一个assert语句有问题）
 # 创建子进程时，只需要传入一个执行函数和函数的参数，创建一个Process实例，用start()方法启动。
 # join()方法可以等待子进程结束后再继续往下运行，通常用于进程间的同步
 
@@ -64,7 +64,7 @@
 #    p.join()
 #    print('All subprocesses done.')
 
-# 以上代码执行时也要带上-O参数：python -O thread.py
+# 以上代码执行时也要带上-O参数：python -O thread_sample.py
 # 对Pool对象调用join()方法会等待所有子进程执行完毕。
 # 调用join()之前必须先调用close()，调用close()之后就不能继续添加新的Process了。
 # Pool的默认大小是CPU核数
