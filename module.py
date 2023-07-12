@@ -95,7 +95,7 @@ print(sys.argv)
 # 但cStringIO是C写的，速度更快，所以经常会有：
 try:
     import cStringIO as StringIO
-except ImportError: # 导入失败会捕获到ImportError
+except ImportError:  # 导入失败会捕获到ImportError
     from io import StringIO
 # 这样就可以优先导入cStringIO，如果有些平台不提供，还可降级使用StringIO
 # 导入时指定了别名StringIO，因此后续代码引用StringIO即可正常工作

@@ -69,6 +69,20 @@
 # 调用join()之前必须先调用close()，调用close()之后就不能继续添加新的Process了。
 # Pool的默认大小是CPU核数
 
+# 子进程
+
+# 使用subprocess控制子进程的输入输出
+import subprocess
+print('$ nslookup www.python.org')
+r = subprocess.call(['nslookup', 'www.python.org'])
+print('Exit code:', r)
+# 通过communicate()方法向子进程输入
+print("$ nslookup")
+p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+output, err = p.communicate(b'set q=mx\npython.org\nexit\n')
+print(output.decode('utf-8'))
+print('Exit code:', p.returncode)
+
 # 进程间通信
 
 # Process之间肯定是需要通信的，操作系统提供了很多机制来实现进程间的通信。
@@ -122,6 +136,7 @@ def loop():
         print('thread %s >>> %s' % (threading.current_thread().name, n))
         time.sleep(1)
     print('thread %s ended.' % threading.current_thread().name)
+
 print('thread %s is running...' % threading.current_thread().name)
 t = threading.Thread(target=loop, name='LoopThread')
 t.start()

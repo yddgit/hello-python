@@ -3,6 +3,55 @@
 
 # 常用内建模块
 
+# datetime
+
+from datetime import datetime
+now = datetime.now()
+print(now)
+print(type(now))
+
+# timestamp
+dt = datetime(2023, 7, 15, 20, 21, 22, 102000)  # 注意最后一个参数单位是 microsecond 不是 millisecond
+print(dt)
+print(dt.timestamp()) # timestamp是一个浮点数表示秒
+t = 1689423682.102
+print(datetime.fromtimestamp(t))
+print(datetime.utcfromtimestamp(t))
+
+# str to datetime
+# https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
+cday = datetime.strptime('2023-8-12 19:33:12', '%Y-%m-%d %H:%M:%S')
+print(cday)
+print(datetime.now().strftime('%a, %b %d %H:%M'))
+
+# datetime可以直接+/-，但需要导入timedelta
+from datetime import timedelta
+now = datetime.now()
+print(now)
+print(now + timedelta(hours=10))
+print(now - timedelta(days=1))
+print(now + timedelta(days=2, hours=12))
+
+# 时区
+from datetime import timezone
+tz_utf_8 = timezone(timedelta(hours=8))
+now = datetime.now()
+print(now.replace(tzinfo=tz_utf_8))
+
+# UTC
+utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+print(utc_dt)
+bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8)))
+print(bj_dt)
+tokyo_dt = utc_dt.astimezone(timezone(timedelta(hours=9)))
+print(tokyo_dt)
+# 不是必须从UTC时区转换到其他时区
+tokyo_dt2 = bj_dt.astimezone(timezone(timedelta(hours=9)))
+print(tokyo_dt2)
+tz = 'UTC+5:00'
+tz_value = int(tz[3:tz.find(":")])
+print(datetime.strptime('2015-1-21 9:01:30', '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone(timedelta(hours=tz_value))))
+
 # collecitons是Python内建的一个集合模块，提供了许多有用的集合类
 
 # namedtuple
@@ -85,6 +134,25 @@ fifo['C'] = 4
 fifo['D'] = 5
 print(fifo)
 
+# ChainMap
+
+# 可以把一组dict串起来并组成一个逻辑上的dict，它本身也是一个dict，但查找时，会按照顺序在内部的dict依次查找
+from collections import ChainMap
+import os, argparse
+defaults = {
+    'color': 'red',
+    'user': 'guest'
+}
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', '--user')
+parser.add_argument('-c', '--color')
+namespace = parser.parse_args()
+command_line_args = {k: v for k, v in vars(namespace).items() if v}
+combined = ChainMap(command_line_args, os.environ, defaults)
+# python inner_module.py -u bob -c green
+print('color=%s' % combined['color'])
+print('user=%s' % combined['user'])
+
 # Counter
 
 # Counter是一个简单的计数器，如统计字符出现的个数
@@ -95,6 +163,9 @@ for ch in 'programming':
 print(c)
 # Counter实际上也是dict的一个子类
 
+# argparse
+
+# https://docs.python.org/3/library/argparse.html
 
 # base64
 
@@ -219,6 +290,15 @@ def calc_md5_with_salt(password):
     return calc_md5(password + ' the-Salt')
 # 经过Salt处理的MD5口令，只要Salt不被黑客知道，即使用户输入简单口令，也很难通过MD5反推明文口令
 
+# hmac
+# 标准的加salt的hash算法
+import hmac
+message = b'Hello World!'
+key = b'secret'
+h = hmac.new(key, message, digestmod='MD5')
+# 如果消息很长，可以多次调用h.update(msg)
+print(h.hexdigest())
+
 # itertools
 
 # Python内建模块itertools提供了非常有用的用于操作迭代对象的函数
@@ -274,6 +354,124 @@ for x in r:
 # 这就说明map()实现了“惰性计算”，类似map()这样能够实现惰性计算的函数就可以处理无限序列
 
 # ifilter()就是filter()的惰性实现
+
+# contextlib
+
+# 只要是实现了上下文管理，就可以用with语句。实现上下文管理通过__enter__和__exit__两个方法实现
+class Query(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        print('Begin')
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type:
+            print('Error')
+        else:
+            print('End')
+
+    def query(self):
+        print('Query info about %s...' % self.name)
+
+with Query('Bob') as q:
+    q.query()
+
+# contextlib提供了更简单的写法
+
+from contextlib import contextmanager
+
+class Query(object):
+    def __init__(self, name):
+        self.name = name
+
+    def query(self):
+        print('Query info about %s...' % self.name)
+
+@contextmanager
+def create_query(name):
+    print('Begin')
+    q = Query(name)
+    yield q
+    print('End')
+
+with create_query('Bob') as q:
+    q.query()
+
+# 也可以用于实现在某段代码前后自动执行特定代码
+@contextmanager
+def tag(name):
+    print('<%s>' % name)
+    yield
+    print('<%s>' % name)
+
+with tag('h1'):
+    print('hello')
+    print('world')
+
+# 如果一个对象没有实现上下文，可以用closing()把对象变为上下文对象
+from contextlib import closing
+from urllib.request import urlopen
+
+with closing(urlopen('https://yesno.wtf/api')) as page:
+    for line in page:
+        print(line)
+
+# urllib
+
+from urllib import request, parse
+
+#GET
+with request.urlopen('https://yesno.wtf/api') as f:
+    data = f.read()
+    print('Status', f.status, f.reason)
+    for k, v in f.getheaders():
+        print('%s: %s' % (k, v))
+    print('Data:', data.decode('utf-8'))
+
+req = request.Request('https://www.google.com')
+req.add_header('User-Agent', 'Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25')
+with request.urlopen(req) as f:
+    print('Status', f.status, f.reason)
+    for k, v in f.getheaders():
+        print('%s: %s' % (k, v))
+    print('Data:', f.read().decode('utf-8'))
+
+#POST
+
+# POST请求需要把参数data以bytes形式传入
+# print('Login in weibo.cn...')
+# email = input('Email:')
+# passwd = input('Password:')
+# login_data = parse.urlencode([
+#     ('username', email),
+#     ('password', passwd),
+#     ('entry', 'mweibo'),
+#     ('client_id', ''),
+#     ('savestate', '1'),
+#     ('ec', ''),
+#     ('pagerefer', 'https://passport.weibo.cn/signin/welcome?entry=mweibo&r=http%3A%2F%2Fm.weibo.cn%2F')
+# ])
+#
+# req = request.Request('https://passport.weibo.cn/sso/login')
+# req.add_header('Origin', 'https://passport.weibo.cn')
+# req.add_header('User-Agent', 'Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25')
+# req.add_header('Referer', 'https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=http%3A%2F%2Fm.weibo.cn%2F')
+#
+# with request.urlopen(req, data=login_data.encode('utf-8')) as f:
+#     print('Status', f.status, f.reason)
+#     for k, v in f.getheaders():
+#         print('%s: %s' % (k, v))
+#     print('Data:', f.read().decode('utf-8'))
+
+# 如果还有更复杂的控制，可以使用handler，如ProxyHandler
+# proxy_handler = urllib.request.ProxyHandler({'http': 'http://www.example.com:3128/'})
+# proxy_auth_handler = urllib.request.ProxyBasicAuthHandler()
+# proxy_auth_handler.add_password('realm', 'host', 'username', 'password')
+# opener = urllib.request.build_opener(proxy_handler, proxy_auth_handler)
+# with opener.open('https://www.example.com/login.html') as f:
+#     pass
 
 # XML
 

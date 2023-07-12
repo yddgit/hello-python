@@ -10,6 +10,7 @@ Learn to use Python
 - 整数和浮点数都是没有大小限制的，浮点数超出一定范围直接表示为`inf`
 - `ord()`获取字符的整数表示，`chr()`把编码转换为对应的字符
 - bytes类型：`b'ABC'`，bytes要变为str，可以用`decode()`，如果有一小部分无效字节，可以传入errors='ignore'来忽略字节：`b'\xe4\xb8\xad\xff'.decode('utf-8', errors='ignore')`
+- 文本文件中也可能有一些非法编码的字符：`open('/path/to/file.txt', 'r', encoding='gbk', errors='ignore')`
 - f-string格式化字符串
 
   ```python

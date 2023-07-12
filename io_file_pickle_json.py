@@ -51,16 +51,45 @@ with open('test.jpg', 'rb') as f:
 # 要读取非ASCII编码的文本文件，必须以二进制模式打开，再解码
 with open('test-gbk.txt', 'rb') as f:
     print(f.read().decode('gbk'))
-# Python还提供了一个codecs模块在读文件时自动转换编码，直接读取unicode
-import codecs
-with codecs.open('test-gbk.txt', 'r', 'gbk') as f:
+
+# 可以传入encoding参数来读取非UTF-8的文件文件
+with open('test-gbk.txt', 'r', encoding='gbk') as f:
     print(f.read())
 
 # 写文件时，open函数传入'w'或'wb'表示写文本文件或写二进制文件
 with open('test.txt', 'w') as f:
     f.write('Hello World!')
-with codecs.open('test-gbk.txt', 'w', 'gbk') as f:
+with open('test-gbk.txt', 'w', encoding='gbk') as f:
     f.write(u'测试完成')
+
+# 追加文件可以传入'a'模式，所有模式定义参考：https://docs.python.org/3/library/functions.html#open
+
+# 在内存中读写str
+
+from io import StringIO, BytesIO
+
+# 写str
+f = StringIO()
+f.write('hello')
+f.write(' ')
+f.write('world!')
+print(f.getvalue())
+
+# 读str
+f = StringIO('Hello!\nHi!\nGoodbye!')
+while True:
+    s = f.readline()
+    if s == '':
+        break
+    print(s.strip())
+
+# 写bytes
+b = BytesIO()
+b.write('中文'.encode('utf-8'))
+print(b.getvalue())
+
+b = BytesIO(b'\xe4\xb8\xad\xe6\x96\x87')
+print(str(b.read(), 'utf-8'))
 
 # 操作文件和目录
 
@@ -75,16 +104,16 @@ print(os.getenv('TMP')) # 获取环境变量
 # 查看当前目录的绝对路径
 print(os.path.abspath('.'))
 # 在某个目录下创建一个新目录，首先把新目录的完整路径表示出来
-print(os.path.join('C:\\tmp', 'testdir'))
+print(os.path.join('D:\\tmp', 'testdir'))
 # 然后创建目录
-os.mkdir(os.path.join('C:\\tmp', 'testdir'))
+os.mkdir(os.path.join('D:\\tmp', 'testdir'))
 # 删除一个目录
-os.rmdir('C:\\tmp\\testdir')
+os.rmdir('D:\\tmp\\testdir')
 # 把两个路径合在一起时，不要直接拼字符串，而要通过os.path.join()函数，这样可以正确处理不同操作系统的路径分隔符
 # 同样拆分路径时，不要直接拆字符串，而要通过os.path.split()函数，这可以把一个路径拆分为两部分，后一部分总是最后级别的目录或文件名
-print(os.path.split('C:\\tmp\\testdir'))
+print(os.path.split('D:\\tmp\\testdir'))
 # os.path.splitext()可以直接得到文件扩展名
-print(os.path.splitext('C:\\tmp\\testdir\\file.txt'))
+print(os.path.splitext('D:\\tmp\\testdir\\file.txt'))
 # 这些合并、拆分路径的函数并不要求目录和文件真实存在，只是对字符串进行操作
 # 对文件重命名
 #os.rename('test.txt', 'test.bak')
