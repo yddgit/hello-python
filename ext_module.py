@@ -59,4 +59,99 @@ image = image.filter(ImageFilter.BLUR)
 image.save('code.jpg', 'jpeg')
 
 # PIL官方文档：http://effbot.org/imagingbook/
+# Pillow官方文档：https://pillow.readthedocs.org/
 
+# requests
+
+# urllib使用麻烦，缺少实用的高级功能，可以使用第三方库requests
+import requests
+
+r = requests.get('https://www.google.com/')
+print(r.status_code)
+print(r.text[0:100], '...')
+
+r = requests.get('https://www.google.com/', params={'q': 'python'})  # 传递参数
+print(r.url)  # 实际请求的url
+print(r.encoding)  # requests自动检测编码
+print(r.content[0:100], '...')  # 使用content获得响应内容的bytes对象
+
+r = requests.get('https://yesno.wtf/api')
+print(r.json())  # 对于特定类型的响应，如：直接获取JSON
+
+r = requests.get('https://www.google.com', headers={'X-Client-Type': 'chrome browser'})  # 传递header使用dict
+print(r.text[0:100], '...')
+
+r = requests.post('https://yesno.wtf/api', data={'force': 'yes'})  # 默认使用application/x-www-form-urlencoded
+print(r.text[0:100], '...')
+r = requests.post('http://yesno.wtf/api', json={'force': 'yes'})  # 传递JSON数据
+print(r.json())
+
+# 上传文件，需要用rb模式读取，这样bytes的长度才是文件的长度
+#r = requests.post('https://yesno.wtf/api', files={'file': open('report.xls', 'rb')})
+
+r = requests.get('https://www.google.com')
+print(r.headers)  # 获取headers
+print(r.headers['Content-Type'])
+print(r.cookies['AEC'])  # 获取cookies
+
+r = requests.get('https://yesno.wtf/api', cookies={'token': '12345', 'status': 'working'})  # 传入Cookie
+print(r.text[0:100], '...')
+r = requests.get('https://yesno.wtf/api', timeout=2.5)  # 指定超时时间（秒）
+print(r.text[0:100], '...')
+
+# chardet
+
+import chardet
+
+print(chardet.detect(b'Hello World'))
+# {'encoding': 'ascii', 'confidence': 1.0, 'language': ''}
+# confidence表示检测的概率是1.0，即100%
+
+print(chardet.detect('这是一段中文，拜托'.encode('gbk')))  # GBK是GB2312的超集
+print(chardet.detect('这是一段中文'.encode('utf-8')))
+print(chardet.detect('最新の主要ニュース'.encode('euc-jp')))
+
+# https://chardet.readthedocs.io/en/latest/supported-encodings.html
+
+# psutil
+
+# process and system utilities
+
+import psutil
+
+print('cpu count:', psutil.cpu_count())
+print('physical cpu count:', psutil.cpu_count(logical=False))
+print('cpu times:', psutil.cpu_times())
+for x in range(10):
+    print('cpu percent:', psutil.cpu_percent(interval=1, percpu=True))
+print('virtual mem:', psutil.virtual_memory())
+print('swap mem:', psutil.swap_memory())
+print('disk partition:', psutil.disk_partitions())
+print('disk usage:', psutil.disk_usage('C:'))
+print('disk io:', psutil.disk_io_counters())
+print('network io:', psutil.net_io_counters())
+print('network if address:', psutil.net_if_addrs())
+print('network if stats:', psutil.net_if_stats())
+print('network connections:', psutil.net_connections())
+print('pids:', psutil.pids())
+# p = psutil.Process(6432)
+# p.name()  # 进程名称
+# p.exe()  # 进程exe路径
+# p.cwd()  # 进程工作目录
+# p.cmdline()  # 进程启动的命令行
+# p.ppid()  # 父进程ID
+# p.parent()  # 父进程
+# p.children()  # 子进程列表
+# p.status()  # 进程状态
+# p.username()  # 进程用户名
+# p.create_time()  # 进程创建时间
+# p.terminal()  # 进程终端
+# p.cpu_times()  # 进程使用的CPU时间
+# p.memory_info()  # 进程使用的内存
+# p.open_files()  # 进程打开的文件
+# p.connections()  # 进程相关的网络连接
+# p.num_threads()  # 进程的线程数量
+# p.threads()  # 所有线程信息
+# p.environ()  # 进程环境变更
+# p.terminate()  # 结束进程
+psutil.test()  # 类似ps命令的效果
