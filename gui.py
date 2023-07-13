@@ -42,7 +42,7 @@ from tkinter import messagebox
 
 class Application(Frame):
     def __init__(self, master=None):
-        Frame.__init__(self, master)
+        Frame.__init__(self, master, padx='50px', pady='50px')
         self.pack()
         self.createWidgets()
     def createWidgets(self):

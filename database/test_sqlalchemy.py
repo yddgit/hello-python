@@ -7,8 +7,7 @@
 
 # 导入SQLAlchemy，并初始化DBSession
 from sqlalchemy import Column, String, create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base
 
 # 创建对象的基类
 Base = declarative_base()
@@ -23,7 +22,7 @@ class User(Base):
 
 # 初始化数据库连接，SQLAlchemy用一个字符串表示连接信息
 # '数据库类型+数据库驱动名称://用户名:口令@主机地址:端口号/数据库名'
-engine = create_engine('mysql+mysqlconnector://root:root@localhost:3306/test')
+engine = create_engine('mysql+mysqlconnector://root:123456@localhost:3306/test')
 # 创建DBSession类型
 DBSession = sessionmaker(bind=engine)
 
@@ -49,7 +48,7 @@ session.close()
 # 创建Session
 session = DBSession()
 # 创建Query查询，filter是where条件，最后调用one()返回唯一行，如果调用all()则返回所有行
-user = session.query(User).filter(User.id=='2').one()
+user = session.query(User).filter(User.id == '2').one()
 # 打印类型和对象的name属性
 print('type: %s, name: %s' % (type(user), user.name))
 # 关闭session
@@ -61,8 +60,9 @@ session.close()
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.orm import relationship
 
-class User(Base):
+class UserEntity(Base):
     __tablename__ = 'user'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(String(20), primary_key=True)
     name = Column(String(20))

@@ -18,12 +18,14 @@
 
 # 以mysql-connector-python为例，演示如何连接到MySQL服务器的test数据库
 
+# pip install mysql-connector
+
 # 导入MySQL驱动
 import mysql.connector
 # 连接数据库test
 
 try:
-    conn = mysql.connector.connect(user='root', password='root', database='test', use_unicode=True)
+    conn = mysql.connector.connect(user='root', password='123456', database='test', use_unicode=True)
     cursor = conn.cursor()
     # 创建user表
     cursor.execute('create table if not exists user (id varchar(20) primary key, name varchar(20))')
